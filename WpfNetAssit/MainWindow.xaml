@@ -1,0 +1,25 @@
+﻿<mah:MetroWindow
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfNetAssit"
+        xmlns:controlzex="urn:controlzex" xmlns:IoConnect="clr-namespace:WpfNetAssit.IoConnect" xmlns:Communicate="clr-namespace:WpfNetAssit.Communicate" x:Class="WpfNetAssit.MainWindow"
+        mc:Ignorable="d"
+        Title="通信助手" Height="450" Width="800">
+    <Grid>
+        <mah:MetroAnimatedTabControl x:Name="FunctionTab" TabStripPlacement="Left" mah:TabControlHelper.Underlined="TabPanel">
+            <TabItem Header="端口">
+                <Grid>
+                    <IoConnect:IoSelectPage x:Name="ioSelectPage" IoClosed="IoSelectPage_IoClosed" IoOpened="IoSelectPage_IoOpened"></IoConnect:IoSelectPage>
+                </Grid>
+            </TabItem>
+            <TabItem Header="通讯">
+                <Grid IsEnabled="{Binding IsOpen, ElementName=ioSelectPage}">
+                    <Communicate:CommunicatePage x:Name="communicatePage"/>
+                </Grid>
+            </TabItem>
+        </mah:MetroAnimatedTabControl>
+    </Grid>
+</mah:MetroWindow>

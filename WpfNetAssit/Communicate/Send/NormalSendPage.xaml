@@ -1,0 +1,28 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfNetAssit.Communicate.Send"
+            xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:Converter="clr-namespace:WpfNetAssit.Converter" x:Class="WpfNetAssit.Communicate.Send.NormalSendPage"
+             mc:Ignorable="d" 
+             d:DesignHeight="100" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Converter:BoolReversConverter x:Key="BoolReversConverter"/>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <TextBox Margin="2"/>
+        <StackPanel Grid.Column="1">
+            <mah:ToggleSwitch x:Name="checkBox" Content="实时" Margin="2"/>
+            <StackPanel Margin="2" IsEnabled="{Binding IsChecked, Converter={StaticResource BoolReversConverter}, ElementName=checkBox}">
+                <Button x:Name="SendBtn" Margin="2" Padding="10,2,10,2" Content="发送" FontSize="14"/>
+                <CheckBox Content="附加回车符" Margin="2" IsChecked="True"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>
