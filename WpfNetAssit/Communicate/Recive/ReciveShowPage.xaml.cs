@@ -24,7 +24,16 @@ namespace WpfNetAssit.Communicate.Recive
         public ReciveShowPage()
         {
             InitializeComponent();
+            InitEncodingComboBox();
             StartUiUpdateTimer();
+        }
+
+        private void InitEncodingComboBox()
+        {
+            EncodingComboBox.ItemsSource = new Encoding[]{
+                Encoding.Default, Encoding.UTF8, Encoding.Unicode, Encoding.ASCII,
+                Encoding.GetEncoding("GB2312"), Encoding.GetEncoding("Big5")
+            };
         }
 
         private void StartUiUpdateTimer()
@@ -71,34 +80,9 @@ namespace WpfNetAssit.Communicate.Recive
             CurCount = 0;
         }
 
-        Task recvTask = null;
-        bool IsRun = false;
-        public void StartRecv(IoConnect.CommunicateIo io)
+        private void EncodingComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            recvTask = Task.Run(() => {
-                byte[] buf = new byte[0x1000];
-                int size = 0;
-                IsRun = true;
-                while(IsRun)
-                {
-                    bool ret = io.Read(buf, ref size);
-                    if(ret && size > 0)
-                    {
-                        CountAdd();
-                        if(IsShowText)
-                            MonitorData(buf, size);
-                    }
-                }
-            });
-        }
-
-        public void StopRecv()
-        {
-            if (recvTask != null && !recvTask.IsCompleted)
-            {
-                IsRun = false;
-                recvTask.Wait();
-            }
+            CurEncoding = EncodingComboBox.SelectedItem as Encoding;
         }
 
         private void MonitorData(byte[] buf, int size)
@@ -117,5 +101,13 @@ namespace WpfNetAssit.Communicate.Recive
         {
             return CurEncoding.GetString(buf);
         }
+
+        public void RecvData(byte[] buf, int size)
+        {
+            CountAdd();
+            if (IsShowText)
+                MonitorData(buf, size);
+        }
+
     }
 }
