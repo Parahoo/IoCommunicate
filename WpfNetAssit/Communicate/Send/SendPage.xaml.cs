@@ -24,5 +24,16 @@ namespace WpfNetAssit.Communicate.Send
         {
             InitializeComponent();
         }
+
+        public IoConnect.CommunicateIo Io = null;
+
+        private void SendPage_DataSend(object sender, SendDataEventArgs e)
+        {
+            if (Io != null)
+            {
+                int size = e.Data.Length;
+                Io.Write(e.Data, ref size);
+            }
+        }
     }
 }

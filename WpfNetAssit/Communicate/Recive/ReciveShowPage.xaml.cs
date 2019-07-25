@@ -24,17 +24,9 @@ namespace WpfNetAssit.Communicate.Recive
         public ReciveShowPage()
         {
             InitializeComponent();
-            InitEncodingComboBox();
             StartUiUpdateTimer();
         }
 
-        private void InitEncodingComboBox()
-        {
-            EncodingComboBox.ItemsSource = new Encoding[]{
-                Encoding.Default, Encoding.UTF8, Encoding.Unicode, Encoding.ASCII,
-                Encoding.GetEncoding("GB2312"), Encoding.GetEncoding("Big5")
-            };
-        }
 
         private void StartUiUpdateTimer()
         {
@@ -52,14 +44,13 @@ namespace WpfNetAssit.Communicate.Recive
 
         public int TotalCount { get; set; } = 0;
         public int CurCount { get; set; } = 0;
-
-        public bool IsShowText { get; set; } = true;
-
         private void CountAdd()
         {
             CurCount++;
             TotalCount++;
         }
+
+        public bool IsShowText { get; set; } = true;
         private void IsShowTextCheckBox_Checked(object sender, RoutedEventArgs e)
         {
             IsShowText = true;
@@ -69,6 +60,19 @@ namespace WpfNetAssit.Communicate.Recive
         {
             IsShowText = false;
         }
+
+        public bool IsHex { get; set; } = false;
+
+        private void IsHexCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            IsHex = true;
+        }
+
+        private void IsHexCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            IsHex = false;
+        }
+
 
         private void ClearMonitorBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -80,14 +84,14 @@ namespace WpfNetAssit.Communicate.Recive
             CurCount = 0;
         }
 
-        private void EncodingComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            CurEncoding = EncodingComboBox.SelectedItem as Encoding;
-        }
 
-        private void MonitorData(byte[] buf, int size)
+        /// <summary>
+        /// 显示接收到的数据
+        /// </summary>
+        /// <param name="buf"></param>
+        /// <param name="size"></param>
+        private void MonitorData(byte[] data)
         {
-            byte[] data = buf.Take(size).ToArray();
 
             string t = TransToString(data);
             Dispatcher.Invoke(() => {
@@ -95,19 +99,47 @@ namespace WpfNetAssit.Communicate.Recive
             });
         }
 
-        // 根据当前编码转换为string
-        public Encoding CurEncoding { get; set; } = Encoding.Default;
-        private string TransToString(byte[] buf)
+
+        /// <summary>
+        /// 将数据转为 16进制显示
+        /// </summary>
+        /// <param name="buf"></param>
+        /// <returns></returns>
+        private string HexToString(byte[] buf)
         {
-            return CurEncoding.GetString(buf);
+            StringBuilder sb = new StringBuilder(buf.Length*3+3);
+            for (int i = 0; i < buf.Length; i++)
+            {
+                sb.Append(buf[i].ToString("X"));
+                sb.Append(" ");
+            }
+            return sb.ToString();
         }
 
-        public void RecvData(byte[] buf, int size)
+        private string EncodingToString(byte[] buf)
+        {
+            return EncodingSelector.EncodingToString(buf);
+        }
+
+
+        /// <summary>
+        /// 将数据转化为显示文本
+        /// </summary>
+        /// <param name="buf"></param>
+        /// <returns></returns>
+        private string TransToString(byte[] buf)
+        {
+            if (IsHex)
+                return HexToString(buf);
+            else
+                return EncodingToString(buf);
+        }
+
+        public void RecvData(byte[] data)
         {
             CountAdd();
             if (IsShowText)
-                MonitorData(buf, size);
+                MonitorData(data);
         }
-
     }
 }

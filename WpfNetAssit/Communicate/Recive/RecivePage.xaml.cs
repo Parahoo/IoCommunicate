@@ -38,7 +38,8 @@ namespace WpfNetAssit.Communicate.Recive
                     bool ret = io.Read(buf, ref size);
                     if (ret && size > 0)
                     {
-                        ReciveShowPage.RecvData(buf, size);
+                        byte[] data = buf.Take(size).ToArray();
+                        ReciveShowPage.RecvData(data);
                     }
                 }
             });

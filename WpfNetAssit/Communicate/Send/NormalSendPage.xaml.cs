@@ -24,5 +24,44 @@ namespace WpfNetAssit.Communicate.Send
         {
             InitializeComponent();
         }
+
+
+        public event SendDataEventHandler DataSend
+        {
+            add { AddHandler(DataSendEvent, value); }
+            remove { RemoveHandler(DataSendEvent, value); }
+        }
+
+        public static readonly RoutedEvent DataSendEvent = EventManager.RegisterRoutedEvent(
+        "DataSend", RoutingStrategy.Bubble, typeof(SendDataEventHandler), typeof(NormalSendPage));
+
+
+        private void InputTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if(IsRealtimeSendCheckBox.IsChecked == true)
+            {
+                SendText(e.Text);
+                e.Handled = true;
+            }
+        }
+
+        private void SendText(string text)
+        {
+            byte[] data = EncodingSelector.CurEncoding.GetBytes(text);
+            var args = new SendDataEventArgs(data);
+            args.RoutedEvent = DataSendEvent;
+            args.Source = this;
+
+            RaiseEvent(args);
+        }
+
+        private void SendBtn_Click(object sender, RoutedEventArgs e)
+        {
+            string str = InputTextBox.Text;
+            if (IsAddEnterCheckBox.IsChecked == true)
+                str += "\r";
+
+            SendText(str);
+        }
     }
 }

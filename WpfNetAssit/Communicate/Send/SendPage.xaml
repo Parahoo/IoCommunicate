@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <local:NormalSendPage VerticalAlignment="Top"/>
+        <local:NormalSendPage x:Name="NormalSendPage" VerticalAlignment="Top" DataSend="SendPage_DataSend"/>
 
     </Grid>
 </UserControl>

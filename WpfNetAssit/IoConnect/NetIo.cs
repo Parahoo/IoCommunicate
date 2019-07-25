@@ -32,17 +32,17 @@ namespace WpfNetAssit.IoConnect
             int port = 0;
             if (Param.BRefLocalPort)
                 port = Param.LocalPort;
-            IPEndPoint endPoint;
-            if (Param.BRefLocalIp)
-                endPoint = new IPEndPoint(IPAddress.Parse(Param.LocalIp), port);
-            else
-                endPoint = new IPEndPoint(IPAddress.Any, port);
             try
             {
+                IPEndPoint endPoint;
+                if (Param.BRefLocalIp)
+                    endPoint = new IPEndPoint(IPAddress.Parse(Param.LocalIp), port);
+                else
+                    endPoint = new IPEndPoint(IPAddress.Any, port);
                 socket.Bind(endPoint);
                 return true;
             }
-            catch (SocketException)
+            catch (Exception)
             {
                 return false;
             }
@@ -66,9 +66,9 @@ namespace WpfNetAssit.IoConnect
 
         public bool Read(byte[] pBuf, ref int readSize)
         {
-            EndPoint point = new IPEndPoint(IPAddress.Parse(Param.RemoteIp), Param.RemotePort);
             try
             {
+                EndPoint point = new IPEndPoint(IPAddress.Parse(Param.RemoteIp), Param.RemotePort);
                 readSize = socket.ReceiveFrom(pBuf, ref point);
             }
             catch (Exception)
@@ -80,7 +80,6 @@ namespace WpfNetAssit.IoConnect
 
         public bool Write(byte[] pData, ref int writeSize)
         {
-            EndPoint point = new IPEndPoint(IPAddress.Parse(Param.RemoteIp), Param.RemotePort);
             int Start = 0;
             while (writeSize > 0)
             {
@@ -89,12 +88,20 @@ namespace WpfNetAssit.IoConnect
                 if (NeedSendSize > udpmaxsize)
                     NeedSendSize = udpmaxsize;
 
-                int sendSize = socket.SendTo(pData, Start, NeedSendSize, SocketFlags.None, point);
-                if (sendSize != NeedSendSize)
+                try
+                {
+                    EndPoint point = new IPEndPoint(IPAddress.Parse(Param.RemoteIp), Param.RemotePort);
+                    int sendSize = socket.SendTo(pData, Start, NeedSendSize, SocketFlags.None, point);
+                    if (sendSize != NeedSendSize)
+                        return false;
+                    writeSize -= sendSize;
+                    Start += sendSize;
+                }
+                catch (Exception)
+                {
                     return false;
+                }
 
-                writeSize -= sendSize;
-                Start += sendSize;
             }
             return true;
         }

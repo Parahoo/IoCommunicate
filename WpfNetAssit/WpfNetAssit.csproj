@@ -71,6 +71,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Communicate\EncodingTool\EncodingSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Communicate\Recive\RecivePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -110,6 +114,9 @@
     <Compile Include="Communicate\CommunicatePage.xaml.cs">
       <DependentUpon>CommunicatePage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Communicate\EncodingTool\EncodingSelector.xaml.cs">
+      <DependentUpon>EncodingSelector.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Communicate\Recive\RecivePage.xaml.cs">
       <DependentUpon>RecivePage.xaml</DependentUpon>
     </Compile>
@@ -119,6 +126,7 @@
     <Compile Include="Communicate\Send\NormalSendPage.xaml.cs">
       <DependentUpon>NormalSendPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Communicate\Send\SendDataEventHandleArgs.cs" />
     <Compile Include="Communicate\Send\SendPage.xaml.cs">
       <DependentUpon>SendPage.xaml</DependentUpon>
     </Compile>

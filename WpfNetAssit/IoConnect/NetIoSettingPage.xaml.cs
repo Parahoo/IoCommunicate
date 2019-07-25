@@ -41,5 +41,15 @@ namespace WpfNetAssit.IoConnect
 
             LocalIpComboBox.ItemsSource = ipv4Ips;
         }
+
+        private void LocalIpComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            IsBindLocalIpCheckBox.IsChecked = LocalIpComboBox.SelectedIndex != -1;
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            IsBindLocalPortCheckBox.IsChecked = (LocalPortTextBox.Text != "") && (LocalPortTextBox.Text != "0");
+        }
     }
 }

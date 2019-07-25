@@ -18,13 +18,13 @@
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
-        <CheckBox Content="本机IP地址:" IsChecked="{Binding BRefLocalIp}"></CheckBox>
-        <CheckBox Grid.Row="1" Content="本机端口:" IsChecked="{Binding BRefLocalPort}"></CheckBox>
+        <CheckBox x:Name="IsBindLocalIpCheckBox" Content="本机IP地址:" IsChecked="{Binding BRefLocalIp}"></CheckBox>
+        <CheckBox x:Name="IsBindLocalPortCheckBox" Grid.Row="1" Content="本机端口:" IsChecked="{Binding BRefLocalPort}"></CheckBox>
         <Label Grid.Row="2" Content="目的IP地址:" VerticalContentAlignment="Center"></Label>
         <Label Grid.Row="3" Content="目的端口:" VerticalContentAlignment="Center"></Label>
 
-        <ComboBox x:Name="LocalIpComboBox" Margin="2" Grid.Column="2" Grid.Row="0" Text="{Binding LocalIp}" IsEditable="True" DropDownOpened="ComboBox_DropDownOpened"></ComboBox>
-        <TextBox Margin="2" Grid.Column="2" Grid.Row="1" VerticalContentAlignment="Center" Text="{Binding LocalPort}"></TextBox>
+        <ComboBox x:Name="LocalIpComboBox" Margin="2" Grid.Column="2" Grid.Row="0" Text="{Binding LocalIp}" IsEditable="True" DropDownOpened="ComboBox_DropDownOpened" SelectionChanged="LocalIpComboBox_SelectionChanged"></ComboBox>
+        <TextBox x:Name="LocalPortTextBox" Margin="2" Grid.Column="2" Grid.Row="1" VerticalContentAlignment="Center" Text="{Binding LocalPort}" TextChanged="TextBox_TextChanged"></TextBox>
         <TextBox Margin="2" Grid.Column="2" Grid.Row="2" VerticalContentAlignment="Center" Text="{Binding RemoteIp}"></TextBox>
         <TextBox Margin="2" Grid.Column="2" Grid.Row="3" VerticalContentAlignment="Center" Text="{Binding RemotePort}"></TextBox>
     </Grid>
