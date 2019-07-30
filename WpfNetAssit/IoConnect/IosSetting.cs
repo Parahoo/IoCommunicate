@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace WpfNetAssit.IoConnect
 {
     [Serializable]
-    class IosSetting
+    public class IosSetting
     {
         public int IoSel = 0;
 

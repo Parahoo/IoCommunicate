@@ -7,12 +7,12 @@
         xmlns:local="clr-namespace:WpfNetAssit"
         xmlns:controlzex="urn:controlzex" xmlns:IoConnect="clr-namespace:WpfNetAssit.IoConnect" xmlns:Communicate="clr-namespace:WpfNetAssit.Communicate" x:Class="WpfNetAssit.MainWindow"
         mc:Ignorable="d"
-        Title="通信助手" Height="450" Width="800">
+        Title="通信助手" Height="450" Width="800" SaveWindowPosition="True" WindowStartupLocation="CenterScreen" Closing="MetroWindow_Closing">
     <Grid>
         <mah:MetroAnimatedTabControl x:Name="FunctionTab" TabStripPlacement="Left" mah:TabControlHelper.Underlined="TabPanel">
             <TabItem Header="端口">
                 <Grid>
-                    <IoConnect:IoSelectPage x:Name="ioSelectPage" IoClosed="IoSelectPage_IoClosed" IoOpened="IoSelectPage_IoOpened"></IoConnect:IoSelectPage>
+                    <IoConnect:IoSelectPage x:Name="ioSelectPage" IoClosed="IoSelectPage_IoClosed" IoOpened="IoSelectPage_IoOpened" ComIoParam="{Binding ComIoParam}" TcpClientIoParam="{Binding TcpClientIoParam}" TcpServerIoParam="{Binding TcpServerIoParam}" UdpIoParam="{Binding UdpIoParam}" CurSel="{Binding IoSel}"></IoConnect:IoSelectPage>
                 </Grid>
             </TabItem>
             <TabItem Header="通讯">

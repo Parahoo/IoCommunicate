@@ -24,6 +24,14 @@ namespace WpfNetAssit
         public MainWindow()
         {
             InitializeComponent();
+
+            UserSetting.Default = UserSetting.Load();
+            ioSelectPage.DataContext = UserSetting.Default.IosSetting;
+        }
+
+        private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            UserSetting.Default.Save();
         }
 
 
