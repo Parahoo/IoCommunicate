@@ -6,6 +6,9 @@
              xmlns:local="clr-namespace:WpfNetAssit.IoConnect"
              mc:Ignorable="d" 
              d:DesignHeight="350" d:DesignWidth="400">
+    <UserControl.DataContext>
+        <local:NetIoParam/>
+    </UserControl.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"></ColumnDefinition>

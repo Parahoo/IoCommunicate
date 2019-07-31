@@ -9,7 +9,7 @@ namespace WpfNetAssit.IoConnect
     [Serializable]
     public class IosSetting
     {
-        public int IoSel = 0;
+        public int IoSel { get; set; } = 0;
 
         public ComIoParam ComIoParam { get; set; } = new ComIoParam();
 

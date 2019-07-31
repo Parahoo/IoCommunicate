@@ -12,7 +12,11 @@
         <mah:MetroAnimatedTabControl x:Name="FunctionTab" TabStripPlacement="Left" mah:TabControlHelper.Underlined="TabPanel">
             <TabItem Header="端口">
                 <Grid>
-                    <IoConnect:IoSelectPage x:Name="ioSelectPage" IoClosed="IoSelectPage_IoClosed" IoOpened="IoSelectPage_IoOpened" ComIoParam="{Binding ComIoParam}" TcpClientIoParam="{Binding TcpClientIoParam}" TcpServerIoParam="{Binding TcpServerIoParam}" UdpIoParam="{Binding UdpIoParam}" CurSel="{Binding IoSel}"></IoConnect:IoSelectPage>
+                    <IoConnect:IoSelectPage x:Name="ioSelectPage" IoClosed="IoSelectPage_IoClosed" IoOpened="IoSelectPage_IoOpened" CurSel="{Binding IoSel}" UdpIoParam="{Binding UdpIoParam}" ComIoParam="{Binding ComIoParam}" TcpServerIoParam="{Binding TcpServerIoParam}" TcpClientIoParam="{Binding TcpClientIoParam}">
+                        <IoConnect:IoSelectPage.DataContext>
+                            <IoConnect:IosSetting/>
+                        </IoConnect:IoSelectPage.DataContext>
+                    </IoConnect:IoSelectPage>
                 </Grid>
             </TabItem>
             <TabItem Header="通讯">

@@ -21,14 +21,14 @@
                 <RadioButton x:Name="radioButton" Margin="10,0,10,0" Content="串口" IsChecked="{Binding CurSel, ConverterParameter=0, Converter={StaticResource RadioBoolToIntConverter}, ElementName=userControl}"/>
                 <RadioButton x:Name="radioButton1" Margin="10,0,10,0" Content="UDP" IsChecked="{Binding CurSel, ConverterParameter=1, Converter={StaticResource RadioBoolToIntConverter}, ElementName=userControl}"/>
                 <RadioButton x:Name="radioButton2" Margin="10,0,10,0" Content="TCP Server" IsChecked="{Binding CurSel, ConverterParameter=2, Converter={StaticResource RadioBoolToIntConverter}, ElementName=userControl}"/>
-                <RadioButton x:Name="radioButton3" Margin="10,0,10,0" Content="TCP Clinet" IsChecked="{Binding CurSel, ConverterParameter=3, Converter={StaticResource RadioBoolToIntConverter}, ElementName=userControl}"/>
+                <RadioButton x:Name="radioButton3" Margin="10,0,10,0" Content="TCP Client" IsChecked="{Binding CurSel, ConverterParameter=3, Converter={StaticResource RadioBoolToIntConverter}, ElementName=userControl}"/>
             </WrapPanel>
             <GroupBox Margin="10" Header="设置" HorizontalAlignment="Left" VerticalAlignment="Top" IsEnabled="{Binding IsOpen, Converter={StaticResource BoolReversConverter}, ElementName=userControl}">
                 <Grid>
-                    <local:ComIoSettingPage x:Name="comIoSettingPage" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding IsChecked, Converter={StaticResource VisibilityConverter}, ElementName=radioButton}"/>
-                    <local:NetIoSettingPage x:Name="UdpIoSettingPage" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding IsChecked, Converter={StaticResource VisibilityConverter}, ElementName=radioButton1}"/>
-                    <local:NetIoSettingPage x:Name="TcpServerSettingPage" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding IsChecked, Converter={StaticResource VisibilityConverter}, ElementName=radioButton2}"/>
-                    <local:NetIoSettingPage x:Name="TcpClientSettingPage" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding IsChecked, Converter={StaticResource VisibilityConverter}, ElementName=radioButton3}"/>
+                    <local:ComIoSettingPage x:Name="comIoSettingPage" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding IsChecked, Converter={StaticResource VisibilityConverter}, ElementName=radioButton}" DataContext="{Binding ComIoParam, ElementName=userControl}"/>
+                    <local:NetIoSettingPage x:Name="UdpIoSettingPage" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding IsChecked, Converter={StaticResource VisibilityConverter}, ElementName=radioButton1}" DataContext="{Binding UdpIoParam, ElementName=userControl}"/>
+                    <local:NetIoSettingPage x:Name="TcpServerSettingPage" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding IsChecked, Converter={StaticResource VisibilityConverter}, ElementName=radioButton2}" DataContext="{Binding TcpServerIoParam, ElementName=userControl}"/>
+                    <local:NetIoSettingPage x:Name="TcpClientSettingPage" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding IsChecked, Converter={StaticResource VisibilityConverter}, ElementName=radioButton3}" DataContext="{Binding TcpClientIoParam, ElementName=userControl}"/>
                 </Grid>
             </GroupBox>
             <StackPanel Orientation="Horizontal">

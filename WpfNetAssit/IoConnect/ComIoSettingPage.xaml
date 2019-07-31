@@ -11,6 +11,9 @@
     <UserControl.Resources>
         <Converter:EnumIntConverter x:Key="EnumIntConverter"/>
     </UserControl.Resources>
+    <UserControl.DataContext>
+        <local:ComIoParam/>
+    </UserControl.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -30,7 +33,7 @@
         <Label Grid.Row="4" Content="停止位:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
 
         <ComboBox x:Name="ComIdComboBox" Margin="2" Grid.Row="0" Grid.Column="1" IsEditable="True" Text="{Binding Name}" DropDownOpened="ComboBox_DropDownOpened"/>
-        <ComboBox Margin="2" Grid.Row="1" Grid.Column="1" Text="{Binding BaudRate}">
+        <ComboBox Margin="2" Grid.Row="1" Grid.Column="1" IsEditable="True" Text="{Binding BaudRate, TargetNullValue=9600}">
             <ComboBoxItem Content="9600"/>
             <ComboBoxItem Content="19200"/>
             <ComboBoxItem Content="57600"/>
@@ -41,7 +44,7 @@
             <ComboBoxItem Content="奇"/>
             <ComboBoxItem Content="偶"/>
         </ComboBox>
-        <ComboBox Margin="2" Grid.Row="3" Grid.Column="1" Text="{Binding DataBits}">
+        <ComboBox Margin="2" Grid.Row="3" Grid.Column="1" IsEditable="True" Text="{Binding DataBits}">
             <ComboBoxItem Content="7"/>
             <ComboBoxItem Content="8"/>
         </ComboBox>

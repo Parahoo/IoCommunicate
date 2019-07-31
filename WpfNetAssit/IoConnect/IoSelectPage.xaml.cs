@@ -27,7 +27,7 @@ namespace WpfNetAssit.IoConnect
             set { SetValue(IsOpenProperty, value); }
         }
         public static readonly DependencyProperty IsOpenProperty =
-            DependencyProperty.Register("IsOpen", typeof(bool), typeof(IoSelectPage), new PropertyMetadata(false));
+            DependencyProperty.Register("IsOpen", typeof(bool), typeof(IoSelectPage), new FrameworkPropertyMetadata(false) { BindsTwoWayByDefault = true});
 
 
         [Bindable(true)]
@@ -37,7 +37,7 @@ namespace WpfNetAssit.IoConnect
             set { SetValue(CurSelProperty, value); }
         }
         public static readonly DependencyProperty CurSelProperty =
-            DependencyProperty.Register("CurSel", typeof(int), typeof(IoSelectPage), new PropertyMetadata(0));
+            DependencyProperty.Register("CurSel", typeof(int), typeof(IoSelectPage), new FrameworkPropertyMetadata(0) { BindsTwoWayByDefault = true });
 
 
         public event EventHandler IoOpened
@@ -71,7 +71,7 @@ namespace WpfNetAssit.IoConnect
 
         // Using a DependencyProperty as the backing store for ComIoParam.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ComIoParamProperty =
-            DependencyProperty.Register("ComIoParam", typeof(ComIoParam), typeof(IoSelectPage), new PropertyMetadata(new ComIoParam()));
+            DependencyProperty.Register("ComIoParam", typeof(ComIoParam), typeof(IoSelectPage), new FrameworkPropertyMetadata(new ComIoParam()) { BindsTwoWayByDefault = true });
 
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace WpfNetAssit.IoConnect
 
         // Using a DependencyProperty as the backing store for UdpIoParam.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty UdpIoParamProperty =
-            DependencyProperty.Register("UdpIoParam", typeof(NetIoParam), typeof(IoSelectPage), new PropertyMetadata(new NetIoParam()));
+            DependencyProperty.Register("UdpIoParam", typeof(NetIoParam), typeof(IoSelectPage), new FrameworkPropertyMetadata(new NetIoParam()) { BindsTwoWayByDefault = true });
 
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace WpfNetAssit.IoConnect
 
         // Using a DependencyProperty as the backing store for TcpServerIoParam.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty TcpServerIoParamProperty =
-            DependencyProperty.Register("TcpServerIoParam", typeof(NetIoParam), typeof(IoSelectPage), new PropertyMetadata(new NetIoParam()));
+            DependencyProperty.Register("TcpServerIoParam", typeof(NetIoParam), typeof(IoSelectPage), new FrameworkPropertyMetadata(new NetIoParam()) { BindsTwoWayByDefault = true });
 
 
 
@@ -114,7 +114,7 @@ namespace WpfNetAssit.IoConnect
 
         // Using a DependencyProperty as the backing store for TcpClientIoParam.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty TcpClientIoParamProperty =
-            DependencyProperty.Register("TcpClientIoParam", typeof(NetIoParam), typeof(IoSelectPage), new PropertyMetadata(new NetIoParam()));
+            DependencyProperty.Register("TcpClientIoParam", typeof(NetIoParam), typeof(IoSelectPage), new FrameworkPropertyMetadata(new NetIoParam()) { BindsTwoWayByDefault = true });
 
 
 
@@ -126,12 +126,6 @@ namespace WpfNetAssit.IoConnect
         public IoSelectPage()
         {
             InitializeComponent();
-
-            comIoSettingPage.DataContext = ComIoParam;
-            UdpIoSettingPage.DataContext = UdpIoParam;
-            TcpServerSettingPage.DataContext = TcpServerIoParam;
-            TcpClientSettingPage.DataContext = TcpClientIoParam;
-
         }
 
         private bool OpenIo()
@@ -155,7 +149,7 @@ namespace WpfNetAssit.IoConnect
                 case 3:
                     {
                         var tcpclientIo = new TcpIo();
-                        tcpclientIo.Param = UdpIoParam;
+                        tcpclientIo.Param = TcpClientIoParam;
                         CurIo = tcpclientIo;
                         break;
                     }
