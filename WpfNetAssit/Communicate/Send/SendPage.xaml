@@ -7,7 +7,14 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <local:NormalSendPage x:Name="NormalSendPage" VerticalAlignment="Top" DataSend="SendPage_DataSend"/>
+        <TabControl TabStripPlacement="Left">
+            <TabItem Header="常规">
+                <local:NormalSendPage x:Name="NormalSendPage" VerticalAlignment="Top" DataSend="SendPage_DataSend"/>
+            </TabItem>
+            <TabItem Header="逻辑">
+                
+            </TabItem>
+        </TabControl>
 
     </Grid>
 </UserControl>

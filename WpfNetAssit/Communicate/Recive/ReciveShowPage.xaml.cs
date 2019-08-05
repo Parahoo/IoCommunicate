@@ -100,21 +100,6 @@ namespace WpfNetAssit.Communicate.Recive
         }
 
 
-        /// <summary>
-        /// 将数据转为 16进制显示
-        /// </summary>
-        /// <param name="buf"></param>
-        /// <returns></returns>
-        private string HexToString(byte[] buf)
-        {
-            StringBuilder sb = new StringBuilder(buf.Length*3+3);
-            for (int i = 0; i < buf.Length; i++)
-            {
-                sb.Append(buf[i].ToString("X"));
-                sb.Append(" ");
-            }
-            return sb.ToString();
-        }
 
         private string EncodingToString(byte[] buf)
         {
@@ -130,7 +115,7 @@ namespace WpfNetAssit.Communicate.Recive
         private string TransToString(byte[] buf)
         {
             if (IsHex)
-                return HexToString(buf);
+                return HexStringConvertor.HexToString(buf);
             else
                 return EncodingToString(buf);
         }

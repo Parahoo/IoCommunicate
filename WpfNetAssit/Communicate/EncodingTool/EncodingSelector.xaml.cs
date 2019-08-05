@@ -51,6 +51,17 @@ namespace WpfNetAssit.Communicate.EncodingTool
             DependencyProperty.Register("Header", typeof(object), typeof(EncodingSelector), new PropertyMetadata("编码"));
 
 
+        public event EventHandler EncodingChanged
+        {
+            add { AddHandler(EncodingChangedEvent, value); }
+            remove { RemoveHandler(EncodingChangedEvent, value); }
+        }
+
+        public static readonly RoutedEvent EncodingChangedEvent = EventManager.RegisterRoutedEvent(
+        "EncodingChanged", RoutingStrategy.Bubble, typeof(EventHandler), typeof(EncodingSelector));
+
+
+
 
         private void InitEncodingComboBox()
         {
@@ -64,6 +75,8 @@ namespace WpfNetAssit.Communicate.EncodingTool
         private void EncodingComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             CurEncoding = EncodingComboBox.SelectedItem as Encoding;
+
+            RaiseEvent(new RoutedEventArgs(EncodingChangedEvent, this));
         }
 
 
