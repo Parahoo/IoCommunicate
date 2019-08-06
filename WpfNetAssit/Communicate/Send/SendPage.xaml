@@ -12,7 +12,10 @@
                 <local:NormalSendPage x:Name="NormalSendPage" VerticalAlignment="Top" DataSend="SendPage_DataSend"/>
             </TabItem>
             <TabItem Header="逻辑">
-                
+                <Grid>
+                    <Border BorderThickness="1" BorderBrush="AliceBlue"></Border>
+                    <local:LogicalSendPage x:Name="LogicalSendPage" Margin="1"/>   
+                </Grid>             
             </TabItem>
         </TabControl>
 

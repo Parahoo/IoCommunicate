@@ -71,6 +71,9 @@
     <Compile Include="Communicate\Send\DataEditor.xaml.cs">
       <DependentUpon>DataEditor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Communicate\Send\LogicalSendPage.xaml.cs">
+      <DependentUpon>LogicalSendPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserSetting.cs" />
     <Page Include="Communicate\CommunicatePage.xaml">
       <SubType>Designer</SubType>
@@ -89,6 +92,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Communicate\Send\DataEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Communicate\Send\LogicalSendPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
