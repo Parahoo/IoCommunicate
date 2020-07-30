@@ -8,6 +8,10 @@ namespace WpfNetAssit.IoConnect
 {
     public interface CommunicateIo
     {
+        string NickName { get; set; }
+        string LinkInfo { get; }
+        string FullInfo { get; }
+
         bool Open();
         bool Close();
         bool Read(byte[] pBuf, ref int readSize);

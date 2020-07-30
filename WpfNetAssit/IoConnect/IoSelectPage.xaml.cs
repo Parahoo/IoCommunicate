@@ -21,15 +21,6 @@ namespace WpfNetAssit.IoConnect
     /// </summary>
     public partial class IoSelectPage : UserControl
     {
-        public bool IsOpen
-        {
-            get { return (bool)GetValue(IsOpenProperty); }
-            set { SetValue(IsOpenProperty, value); }
-        }
-        public static readonly DependencyProperty IsOpenProperty =
-            DependencyProperty.Register("IsOpen", typeof(bool), typeof(IoSelectPage), new FrameworkPropertyMetadata(false) { BindsTwoWayByDefault = true});
-
-
         [Bindable(true)]
         public int CurSel
         {
@@ -48,16 +39,6 @@ namespace WpfNetAssit.IoConnect
 
         public static readonly RoutedEvent IoOpenedEvent = EventManager.RegisterRoutedEvent(
         "IoOpened", RoutingStrategy.Bubble, typeof(EventHandler), typeof(IoSelectPage));
-
-
-        public event EventHandler IoClosed
-        {
-            add { AddHandler(IoClosedEvent, value); }
-            remove { RemoveHandler(IoClosedEvent, value); }
-        }
-
-        public static readonly RoutedEvent IoClosedEvent = EventManager.RegisterRoutedEvent(
-        "IoClosed", RoutingStrategy.Bubble, typeof(EventHandler), typeof(IoSelectPage));
 
 
         /// <summary>
@@ -135,21 +116,21 @@ namespace WpfNetAssit.IoConnect
                 case 0:
                     {
                         var comIo = new ComIo();
-                        comIo.Param = ComIoParam;
+                        comIo.Param = ComIoParam.Clone() as ComIoParam;
                         CurIo = comIo;
                         break;
                     }
                 case 1:
                     {
                         var udpIo = new UdpIo();
-                        udpIo.Param = UdpIoParam;
+                        udpIo.Param = UdpIoParam.Clone() as NetIoParam;
                         CurIo = udpIo;
                         break;
                     }
                 case 3:
                     {
                         var tcpclientIo = new TcpIo();
-                        tcpclientIo.Param = TcpClientIoParam;
+                        tcpclientIo.Param = TcpClientIoParam.Clone() as NetIoParam;
                         CurIo = tcpclientIo;
                         break;
                     }
@@ -164,21 +145,8 @@ namespace WpfNetAssit.IoConnect
         {
             if(OpenIo())
             {
-                IsOpen = true;
                 RaiseEvent(new RoutedEventArgs(IoOpenedEvent, this));
             }
-        }
-
-        private void CloseBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if (CurIo != null)
-            {
-                CurIo.Close();
-                CurIo = null;
-            }
-
-            IsOpen = false;
-            RaiseEvent(new RoutedEventArgs(IoClosedEvent, this));
         }
     }
 }

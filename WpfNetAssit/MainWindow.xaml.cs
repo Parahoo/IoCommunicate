@@ -13,6 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WpfNetAssit.Communicate;
+using WpfNetAssit.IoConnect;
 
 namespace WpfNetAssit
 {
@@ -34,16 +36,28 @@ namespace WpfNetAssit
             UserSetting.Default.Save();
         }
 
+        void AddNewCommunicate(CommunicateIo io)
+        {
+            var communicatePage = new CommunicatePage();
+
+            var page = new TabItem();
+            page.Header = io.FullInfo;
+            page.Content = communicatePage;
+            page.SetValue(MahApps.Metro.Controls.TabControlHelper.CloseButtonEnabledProperty, true);
+            FunctionTab.Items.Add(page);
+
+            communicatePage.StartCommunicate(io);
+        }
+
 
         private void IoSelectPage_IoOpened(object sender, EventArgs e)
         {
             FunctionTab.SelectedIndex = 1;
-            communicatePage.StartCommunicate(ioSelectPage.CurIo);
+            AddNewCommunicate(ioSelectPage.CurIo);
         }
 
         private void IoSelectPage_IoClosed(object sender, EventArgs e)
         {
-            communicatePage.StopCommunicate();
         }
     }
 }

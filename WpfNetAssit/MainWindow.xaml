@@ -9,19 +9,14 @@
         mc:Ignorable="d"
         Title="通信助手" Height="450" Width="800" SaveWindowPosition="True" WindowStartupLocation="CenterScreen" Closing="MetroWindow_Closing">
     <Grid>
-        <mah:MetroAnimatedTabControl x:Name="FunctionTab" TabStripPlacement="Left" mah:TabControlHelper.Underlined="TabPanel">
+        <mah:MetroAnimatedTabControl x:Name="FunctionTab" mah:TabControlHelper.Underlined="SelectedTabItem">
             <TabItem Header="端口">
                 <Grid>
-                    <IoConnect:IoSelectPage x:Name="ioSelectPage" IoClosed="IoSelectPage_IoClosed" IoOpened="IoSelectPage_IoOpened" CurSel="{Binding IoSel}" UdpIoParam="{Binding UdpIoParam}" ComIoParam="{Binding ComIoParam}" TcpServerIoParam="{Binding TcpServerIoParam}" TcpClientIoParam="{Binding TcpClientIoParam}">
+                    <IoConnect:IoSelectPage x:Name="ioSelectPage" IoOpened="IoSelectPage_IoOpened" CurSel="{Binding IoSel}" UdpIoParam="{Binding UdpIoParam}" ComIoParam="{Binding ComIoParam}" TcpServerIoParam="{Binding TcpServerIoParam}" TcpClientIoParam="{Binding TcpClientIoParam}">
                         <IoConnect:IoSelectPage.DataContext>
                             <IoConnect:IosSetting/>
                         </IoConnect:IoSelectPage.DataContext>
                     </IoConnect:IoSelectPage>
-                </Grid>
-            </TabItem>
-            <TabItem Header="通讯">
-                <Grid IsEnabled="{Binding IsOpen, ElementName=ioSelectPage}">
-                    <Communicate:CommunicatePage x:Name="communicatePage"/>
                 </Grid>
             </TabItem>
         </mah:MetroAnimatedTabControl>

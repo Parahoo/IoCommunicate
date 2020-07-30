@@ -7,18 +7,33 @@ using System.Threading.Tasks;
 
 namespace WpfNetAssit.IoConnect
 {
-    public class ComIoParam
+    public class ComIoParam : ICloneable
     {
         public string Name { get; set; } = "com3";
         public int BaudRate { get; set; } = 9600;
         public Parity Parity { get; set; } = Parity.None;
         public int DataBits { get; set; } = 8;
         public StopBits StopBit { get; set; } = StopBits.One;
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
+
+        public override string ToString()
+        {
+            return Name + "@" + BaudRate.ToString();
+        }
     }
 
     public class ComIo : CommunicateIo
     {
         public ComIoParam Param { get; set; } = new ComIoParam();
+        public string NickName { get; set; } = "Com";
+
+        public string LinkInfo => Param.ToString();
+
+        public string FullInfo => NickName+LinkInfo;
 
         public SerialPort port;
 

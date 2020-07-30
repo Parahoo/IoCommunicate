@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace WpfNetAssit.IoConnect
 {
-    public class NetIoParam
+    public class NetIoParam : ICloneable
     {
 
         public bool BRefLocalIp { get; set; } = false;
@@ -18,11 +18,27 @@ namespace WpfNetAssit.IoConnect
         public int LocalPort { get; set; } = 0;
         public string RemoteIp { get; set; } = "192.168.1.100";
         public int RemotePort { get; set; } = 60000;
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
+
+        override public string ToString()
+        {
+            return "["+ LocalIp + ":" + LocalPort +"] <-> [" + RemoteIp + ":" + RemotePort + "]";
+        }
     }
 
     public class UdpIo : CommunicateIo
     {
         public NetIoParam Param { get; set; }= new NetIoParam();
+
+        public string NickName { get; set; } = "Udp";
+
+        public string LinkInfo => Param.ToString();
+
+        public string FullInfo => NickName + "\r\n"+ LinkInfo;
 
         private Socket socket;
 
@@ -110,6 +126,11 @@ namespace WpfNetAssit.IoConnect
     public class TcpIo : CommunicateIo
     {
         public NetIoParam Param { get; set; } = new NetIoParam();
+        public string NickName { get; set; } = "Tcp";
+
+        public string LinkInfo => Param.ToString();
+
+        public string FullInfo => NickName + "\r\n" + LinkInfo;
 
         private Socket socket;
 

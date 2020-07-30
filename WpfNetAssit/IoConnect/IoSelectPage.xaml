@@ -33,7 +33,6 @@
             </GroupBox>
             <StackPanel Orientation="Horizontal">
                 <Button x:Name="OpenBtn" Content="打开" Margin="10" Padding="10,2,10,2" FontSize="16" IsEnabled="{Binding IsOpen, Converter={StaticResource BoolReversConverter}, ElementName=userControl}" Click="OpenBtn_Click"></Button>
-                <Button x:Name="CloseBtn" Content="关闭" Margin="10" Padding="10,2,10,2" FontSize="16"  IsEnabled="{Binding IsOpen, ElementName=userControl}" Click="CloseBtn_Click"></Button>
             </StackPanel>
         </StackPanel>
 
