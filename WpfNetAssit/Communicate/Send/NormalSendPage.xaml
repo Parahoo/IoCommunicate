@@ -17,7 +17,7 @@
             <ColumnDefinition/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
-        <Grid Visibility="{Binding IsChecked, ConverterParameter=Visible, Converter={StaticResource BoolToValueConverter}, ElementName=IsRealtimeSendCheckBox, FallbackValue=Hidden}">
+        <Grid Visibility="{Binding IsOn, ConverterParameter=Visible, Converter={StaticResource BoolToValueConverter}, ElementName=IsRealtimeSendCheckBox, FallbackValue=Hidden}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition/>
@@ -26,12 +26,12 @@
             <TextBox Grid.Row="1" x:Name="InputTextBox" Margin="2" PreviewTextInput="InputTextBox_PreviewTextInput"/>
         </Grid>
         <StackPanel Grid.Column="1">
-            <mah:ToggleSwitch x:Name="IsRealtimeSendCheckBox" Content="实时" Margin="2"/>
-            <StackPanel Margin="2" IsEnabled="{Binding IsChecked, Converter={StaticResource BoolReversConverter}, ElementName=IsRealtimeSendCheckBox}">
+            <mah:ToggleSwitch x:Name="IsRealtimeSendCheckBox" Content="实时" Margin="2,2,0,2"/>
+            <StackPanel Margin="2" IsEnabled="{Binding IsOn, Converter={StaticResource BoolReversConverter}, ElementName=IsRealtimeSendCheckBox}">
                 <Button x:Name="SendBtn" Margin="2" Padding="10,2,10,2" Content="发送" FontSize="14" Click="SendBtn_Click"/>
                 <CheckBox x:Name="IsAddEnterCheckBox" Content="附加回车符" Margin="2" IsChecked="True"/>
             </StackPanel>
         </StackPanel>
-        <local:DataEditor x:Name="DataEditor" Visibility="{Binding IsChecked, ConverterParameter=Hidden, Converter={StaticResource BoolToValueConverter}, ElementName=IsRealtimeSendCheckBox, FallbackValue=Visible}" />
+        <local:DataEditor x:Name="DataEditor" Visibility="{Binding IsOn, ConverterParameter=Hidden, Converter={StaticResource BoolToValueConverter}, ElementName=IsRealtimeSendCheckBox, FallbackValue=Visible}" />
     </Grid>
 </UserControl>

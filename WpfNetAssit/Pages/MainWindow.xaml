@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfNetAssit"
-        xmlns:controlzex="urn:controlzex" xmlns:IoConnect="clr-namespace:WpfNetAssit.IoConnect" xmlns:Communicate="clr-namespace:WpfNetAssit.Communicate" x:Class="WpfNetAssit.MainWindow"
+        xmlns:controlzex="urn:controlzex" xmlns:IoConnect="clr-namespace:WpfNetAssit.IoConnect" xmlns:Communicate="clr-namespace:WpfNetAssit.Communicate" x:Class="WpfNetAssit.Pages.MainWindowView"
         mc:Ignorable="d"
         Title="通信助手" Height="450" Width="800" SaveWindowPosition="True" WindowStartupLocation="CenterScreen" Closing="MetroWindow_Closing">
     <Grid>

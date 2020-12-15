@@ -38,7 +38,7 @@ namespace WpfNetAssit.Communicate.Send
 
         private void InputTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            if(IsRealtimeSendCheckBox.IsChecked == true)
+            if(IsRealtimeSendCheckBox.IsOn == true)
             {
                 SendText(e.Text);
                 e.Handled = true;

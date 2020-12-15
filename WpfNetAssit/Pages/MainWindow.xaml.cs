@@ -16,14 +16,14 @@ using System.Windows.Shapes;
 using WpfNetAssit.Communicate;
 using WpfNetAssit.IoConnect;
 
-namespace WpfNetAssit
+namespace WpfNetAssit.Pages
 {
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class MainWindow : MetroWindow
+    public partial class MainWindowView : MetroWindow
     {
-        public MainWindow()
+        public MainWindowView()
         {
             InitializeComponent();
 

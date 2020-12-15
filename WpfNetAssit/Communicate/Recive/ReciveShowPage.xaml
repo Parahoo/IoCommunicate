@@ -19,7 +19,7 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
             <Button HorizontalAlignment="Left" VerticalAlignment="Center" BorderBrush="{x:Null}" Margin="2,2,10,2">
-                <iconPacks:PackIconMaterial Kind="SettingsOutline"/>
+                <iconPacks:PackIconMaterial Kind="SendOutline"/>
             </Button>
             <CheckBox x:Name="IsShowTextCheckBox" Margin="2" Content="显示" IsChecked="True" Checked="IsShowTextCheckBox_Checked" Unchecked="IsShowTextCheckBox_Unchecked"/>
             <StackPanel Orientation="Horizontal" Visibility="{Binding IsChecked, Converter={StaticResource VisibilityConverter}, ElementName=IsShowTextCheckBox}">
