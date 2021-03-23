@@ -8,14 +8,14 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <mah:MetroTabControl TabStripPlacement="Left">
-            <mah:MetroTabItem Header="显示">
-                <local:ReciveShowPage x:Name="ReciveShowPage"></local:ReciveShowPage>
-            </mah:MetroTabItem>
+        <TabControl TabStripPlacement="Left">
+            <TabItem Header="显示">
+                <local:ReciveShowPage x:Name="ReciveShowPage" DataContext="{Binding ReciveShowPageModel}"></local:ReciveShowPage>
+            </TabItem>
             
-            <mah:MetroTabItem Header="转换">
+            <TabItem Header="转换">
 
-            </mah:MetroTabItem>
-        </mah:MetroTabControl>
+            </TabItem>
+        </TabControl>
     </Grid>
 </UserControl>

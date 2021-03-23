@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 namespace WpfNetAssit.IoConnect
 {
     [Serializable]
-    public class IosSetting
+    public class IosSetting : ObservableObject
     {
         public int IoSel { get; set; } = 0;
 

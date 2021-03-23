@@ -49,7 +49,8 @@ namespace WpfNetAssit.IoConnect
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            IsBindLocalPortCheckBox.IsChecked = (LocalPortTextBox.Text != "") && (LocalPortTextBox.Text != "0");
+            if(LocalPortTextBox.IsFocused)
+                IsBindLocalPortCheckBox.IsChecked = (LocalPortTextBox.Text != "") && (LocalPortTextBox.Text != "0");
         }
     }
 }

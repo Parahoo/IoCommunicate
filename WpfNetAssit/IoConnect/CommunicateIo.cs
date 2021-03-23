@@ -6,11 +6,15 @@ using System.Threading.Tasks;
 
 namespace WpfNetAssit.IoConnect
 {
-    public interface CommunicateIo
+    public interface ICommunicateIo
     {
         string NickName { get; set; }
-        string LinkInfo { get; }
+        string LinkInfo { get; set; }
         string FullInfo { get; }
+
+        string ErrorInfo { get; set; }
+
+        bool IsLinkOk { get; set; }
 
         bool Open();
         bool Close();

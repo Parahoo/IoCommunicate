@@ -36,7 +36,7 @@ namespace WpfNetAssit.Converter
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return parameter;
+            return value != null && value.Equals(true) ? parameter : Binding.DoNothing;
         }
     }
 }

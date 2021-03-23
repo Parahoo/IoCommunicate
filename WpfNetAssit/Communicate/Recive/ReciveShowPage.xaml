@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WpfNetAssit.Communicate.Recive"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-             xmlns:Text="clr-namespace:System.Text;assembly=mscorlib" xmlns:Converter="clr-namespace:WpfNetAssit.Converter" x:Class="WpfNetAssit.Communicate.Recive.ReciveShowPage"
+             xmlns:Text="clr-namespace:System.Text;assembly=mscorlib" xmlns:Converter="clr-namespace:WpfNetAssit.Converter" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" x:Class="WpfNetAssit.Communicate.Recive.ReciveShowPage"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -19,33 +19,33 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
             <Button HorizontalAlignment="Left" VerticalAlignment="Center" BorderBrush="{x:Null}" Margin="2,2,10,2">
-                <iconPacks:PackIconMaterial Kind="SendOutline"/>
+                <materialDesign:PackIcon Kind="SendOutline"/>
             </Button>
-            <CheckBox x:Name="IsShowTextCheckBox" Margin="2" Content="显示" IsChecked="True" Checked="IsShowTextCheckBox_Checked" Unchecked="IsShowTextCheckBox_Unchecked"/>
+            <CheckBox x:Name="IsShowTextCheckBox" Margin="2" Content="显示" IsChecked="{Binding IsShowText}"/>
             <StackPanel Orientation="Horizontal" Visibility="{Binding IsChecked, Converter={StaticResource VisibilityConverter}, ElementName=IsShowTextCheckBox}">
-                <CheckBox x:Name="IsHexCheckBox" Margin="2" Checked="IsHexCheckBox_Checked" Unchecked="IsHexCheckBox_Unchecked">
+                <CheckBox x:Name="IsHexCheckBox" Margin="2" IsChecked="{Binding IsHex}">
                     <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconSimpleIcons Kind="Hexo" VerticalAlignment="Center"/>
+                        <materialDesign:PackIcon Kind="Hexagons" VerticalAlignment="Center"/>
                         <Label Content="16进制显示"/>
                     </StackPanel>
                 </CheckBox>
-                <EncodingTool:EncodingSelector x:Name="EncodingSelector"/>
+                <EncodingTool:EncodingSelector x:Name="EncodingSelector" EncodingString="{Binding EncodingString}"/>
             </StackPanel>
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button x:Name="ClearMonitorBtn" Content="清屏" Margin="2" Click="ClearMonitorBtn_Click"/>
+            <Button x:Name="ClearMonitorBtn" Content="清屏" Margin="2" Command="{Binding ClearMonitorCommand}"/>
             <StackPanel Margin="2" MinWidth="80">
                 <StackPanel Orientation="Horizontal">
                     <Label Content="总计数:" FontSize="8"/>
-                    <Label x:Name="TotalCountLabel" Content="0" FontSize="8"/>
+                    <Label x:Name="TotalCountLabel" Content="{Binding TotalCount}" FontSize="8"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label Content="当前计数:" FontSize="8"/>
-                    <Label x:Name="CurCountLabel" Content="0" FontSize="8"/>
+                    <Label x:Name="CurCountLabel" Content="{Binding CurCount}" FontSize="8"/>
                 </StackPanel>
             </StackPanel>
-            <Button x:Name="ClearCount" Content="清计数" Margin="2" Click="ClearCount_Click"/>
+            <Button x:Name="ClearCount" Content="清计数" Margin="2" Command="{Binding ClearCountCommand}"/>
         </StackPanel>
-        <TextBox x:Name="MonitorTextBox" Grid.Row="1" IsEnabled="False"/>
+        <TextBox x:Name="MonitorTextBox" TextWrapping="Wrap" Text="{Binding DisplayString}" Grid.Row="1" IsEnabled="False"/>
     </Grid>
 </UserControl>

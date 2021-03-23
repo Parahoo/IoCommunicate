@@ -4,37 +4,42 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WpfNetAssit.IoConnect"
-             xmlns:mah="http://metro.mahapps.com/winfx/xaml/shared" xmlns:Converter="clr-namespace:WpfNetAssit.Converter" x:Name="userControl" x:Class="WpfNetAssit.IoConnect.IoSelectPage"
+             xmlns:Converter="clr-namespace:WpfNetAssit.Converter" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+             x:Name="userControl" 
+             x:Class="WpfNetAssit.IoConnect.IoSelectPageView"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" >
+             d:DesignHeight="300" d:DesignWidth="400">
     <UserControl.Resources>
         <Converter:RadioBoolToIntConverter x:Key="RadioBoolToIntConverter"/>
         <Converter:EnumToBooleanConverter x:Key="EnumToBooleanConverter"/>
         <Converter:BoolReversConverter x:Key="BoolReversConverter"/>
         <Converter:VisibilityConverter x:Key="VisibilityConverter"/>
-        <mah:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+        <Converter:VisibilityConverter x:Key="StringToVisibilityConverter"/>
     </UserControl.Resources>
     <Grid>
-        <StackPanel>
-            <Label Content="接口类型:"/>
-            <WrapPanel IsEnabled="{Binding IsOpen, Converter={StaticResource BoolReversConverter}, ElementName=userControl}">
-                <RadioButton x:Name="radioButton" Margin="10,0,10,0" Content="串口" IsChecked="{Binding CurSel, ConverterParameter=0, Converter={StaticResource RadioBoolToIntConverter}, ElementName=userControl}"/>
-                <RadioButton x:Name="radioButton1" Margin="10,0,10,0" Content="UDP" IsChecked="{Binding CurSel, ConverterParameter=1, Converter={StaticResource RadioBoolToIntConverter}, ElementName=userControl}"/>
-                <RadioButton x:Name="radioButton2" Margin="10,0,10,0" Content="TCP Server" IsChecked="{Binding CurSel, ConverterParameter=2, Converter={StaticResource RadioBoolToIntConverter}, ElementName=userControl}"/>
-                <RadioButton x:Name="radioButton3" Margin="10,0,10,0" Content="TCP Client" IsChecked="{Binding CurSel, ConverterParameter=3, Converter={StaticResource RadioBoolToIntConverter}, ElementName=userControl}"/>
-            </WrapPanel>
-            <GroupBox Margin="10" Header="设置" HorizontalAlignment="Left" VerticalAlignment="Top" IsEnabled="{Binding IsOpen, Converter={StaticResource BoolReversConverter}, ElementName=userControl}">
-                <Grid>
-                    <local:ComIoSettingPage x:Name="comIoSettingPage" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding IsChecked, Converter={StaticResource VisibilityConverter}, ElementName=radioButton}" DataContext="{Binding ComIoParam, ElementName=userControl}"/>
-                    <local:NetIoSettingPage x:Name="UdpIoSettingPage" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding IsChecked, Converter={StaticResource VisibilityConverter}, ElementName=radioButton1}" DataContext="{Binding UdpIoParam, ElementName=userControl}"/>
-                    <local:NetIoSettingPage x:Name="TcpServerSettingPage" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding IsChecked, Converter={StaticResource VisibilityConverter}, ElementName=radioButton2}" DataContext="{Binding TcpServerIoParam, ElementName=userControl}"/>
-                    <local:NetIoSettingPage x:Name="TcpClientSettingPage" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding IsChecked, Converter={StaticResource VisibilityConverter}, ElementName=radioButton3}" DataContext="{Binding TcpClientIoParam, ElementName=userControl}"/>
-                </Grid>
-            </GroupBox>
+        <StackPanel Margin="20,0">
+            <TextBlock Style="{DynamicResource MaterialDesignBody1TextBlock}" Text="接口类型:"/>
             <StackPanel Orientation="Horizontal">
-                <Button x:Name="OpenBtn" Content="打开" Margin="10" Padding="10,2,10,2" FontSize="16" IsEnabled="{Binding IsOpen, Converter={StaticResource BoolReversConverter}, ElementName=userControl}" Click="OpenBtn_Click"></Button>
+                <RadioButton x:Name="radioButton" Margin="10,0,10,0" Content="串口" IsChecked="{Binding IosSetting.IoSel, Mode=TwoWay, ConverterParameter=0, Converter={StaticResource RadioBoolToIntConverter}}"/>
+                <RadioButton x:Name="radioButton1" Margin="10,0,10,0" Content="UDP" IsChecked="{Binding IosSetting.IoSel,Mode=TwoWay, ConverterParameter=1, Converter={StaticResource RadioBoolToIntConverter}}"/>
+                <RadioButton x:Name="radioButton2" Margin="10,0,10,0" Content="TCP Server" IsChecked="{Binding IosSetting.IoSel,Mode=TwoWay, ConverterParameter=2, Converter={StaticResource RadioBoolToIntConverter}}"/>
+                <RadioButton x:Name="radioButton3" Margin="10,0,10,0" Content="TCP Client" IsChecked="{Binding IosSetting.IoSel,Mode=TwoWay, ConverterParameter=3, Converter={StaticResource RadioBoolToIntConverter}}"/>
+            </StackPanel>
+            <materialDesign:Card Margin="20,10" HorizontalAlignment="Center" VerticalAlignment="Top">
+                <Grid Margin="20">
+                    <local:ComIoSettingPage x:Name="comIoSettingPage" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding IsChecked, Converter={StaticResource VisibilityConverter}, ElementName=radioButton}" DataContext="{Binding IosSetting.ComIoParam}"/>
+                    <local:NetIoSettingPage x:Name="UdpIoSettingPage" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding IsChecked, Converter={StaticResource VisibilityConverter}, ElementName=radioButton1}" DataContext="{Binding IosSetting.UdpIoParam}"/>
+                    <local:NetIoSettingPage x:Name="TcpServerSettingPage" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding IsChecked, Converter={StaticResource VisibilityConverter}, ElementName=radioButton2}" DataContext="{Binding IosSetting.TcpServerIoParam}"/>
+                    <local:NetIoSettingPage x:Name="TcpClientSettingPage" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding IsChecked, Converter={StaticResource VisibilityConverter}, ElementName=radioButton3}" DataContext="{Binding IosSetting.TcpClientIoParam}"/>
+                </Grid>
+            </materialDesign:Card>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button x:Name="OpenBtn" Content="打开" Margin="0,10,0,0" Padding="20,5" FontSize="16"  Command="{Binding OpenCommand}"></Button>
             </StackPanel>
         </StackPanel>
-
+        <materialDesign:Snackbar MessageQueue="{Binding BoundMessageQueue}" 
+                     x:Name="Snackbar"
+                     HorizontalAlignment="Stretch"></materialDesign:Snackbar>
     </Grid>
 </UserControl>

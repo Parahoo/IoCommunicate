@@ -51,6 +51,19 @@ namespace WpfNetAssit.Communicate.EncodingTool
             DependencyProperty.Register("Header", typeof(object), typeof(EncodingSelector), new PropertyMetadata("编码"));
 
 
+
+        public string EncodingString
+        {
+            get { return (string)GetValue(EncodingStringProperty); }
+            set { CurEncoding = Encoding.GetEncoding(value); SetValue(EncodingStringProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for EncodingString.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty EncodingStringProperty =
+            DependencyProperty.Register("EncodingString", typeof(string), typeof(EncodingSelector), new FrameworkPropertyMetadata("UTF-8", FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
+
+
         public event EventHandler EncodingChanged
         {
             add { AddHandler(EncodingChangedEvent, value); }
@@ -71,11 +84,23 @@ namespace WpfNetAssit.Communicate.EncodingTool
             };
         }
 
-        public Encoding CurEncoding { get; set; } = Encoding.Default;
+
+
+        public Encoding CurEncoding
+        {
+            get { return (Encoding)GetValue(CurEncodingProperty); }
+            set { SetValue(CurEncodingProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for CurEncoding.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty CurEncodingProperty =
+            DependencyProperty.Register("CurEncoding", typeof(Encoding), typeof(EncodingSelector), new FrameworkPropertyMetadata(Encoding.UTF8, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
+
         private void EncodingComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             CurEncoding = EncodingComboBox.SelectedItem as Encoding;
-
+            EncodingString = CurEncoding.WebName;
             RaiseEvent(new RoutedEventArgs(EncodingChangedEvent, this));
         }
 
