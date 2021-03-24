@@ -20,9 +20,8 @@
     <Window.DataContext>
         <pages:MainWindowViewModel/>
     </Window.DataContext>
-    <materialDesign:DialogHost IsOpen="{Binding IoDialogIsOpen}">
+    <materialDesign:DialogHost x:Name="rootdialoghost" IsOpen="{Binding IoDialogIsOpen}">
         <materialDesign:DialogHost.DialogContentTemplate>
-
             <DataTemplate>
                 <DataTemplate.Resources>
                     <DataTemplate DataType="{x:Type IoConnect:IoSelectPageViewModel}">
@@ -42,67 +41,77 @@
             </DataTemplate>
         </materialDesign:DialogHost.DialogContentTemplate>
         <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <materialDesign:ColorZone>
-                <i:Interaction.Behaviors>
-                    <behaviors:DragWindowBehavior />
-                    <behaviors:TemplateBindingBehavior TargetTemplatePropertyPath="(WindowChrome.WindowChrome).(WindowChrome.CaptionHeight)" SourceProperty="ActualHeight"/>
-                </i:Interaction.Behaviors>
-                <Grid>
-                    <StackPanel Orientation="Horizontal">
-                        <Button HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,0" Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" Style="{DynamicResource MaterialDesignIconButton}" Command="{Binding ShowAddCommand}">
-                            <materialDesign:PackIcon Kind="add"/>
-                        </Button>
-                        <ItemsControl x:Name="HeaderTab" ItemsSource="{Binding CommunicateIos}"  Margin="2">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel Orientation="Horizontal"></StackPanel>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <RadioButton Style="{DynamicResource MaterialDesignTabRadioButton}" IsChecked="{Binding IsSelected}" GroupName="Ios" Height="Auto">
-                                        <StackPanel Orientation="Horizontal">
-                                            <StackPanel>
-                                                <TextBlock Style="{DynamicResource MaterialDesignHeadline6TextBlock}" Text="{Binding Title}" />
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Style="{DynamicResource MaterialDesignBody2TextBlock}" VerticalAlignment="Center" Text="{Binding Info}" />
-                                                    <ToggleButton Style="{DynamicResource MaterialDesignFlatButton}" VerticalAlignment="Center" IsChecked="{Binding IsIoOk}">
-                                                        <materialDesign:PackIcon Kind="Link"></materialDesign:PackIcon>
-                                                    </ToggleButton>
+            <pages:HomePage Grid.RowSpan="2"></pages:HomePage>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <materialDesign:ColorZone>
+                    <i:Interaction.Behaviors>
+                        <behaviors:DragWindowBehavior />
+                        <behaviors:TemplateBindingBehavior TargetTemplatePropertyPath="(WindowChrome.WindowChrome).(WindowChrome.CaptionHeight)" SourceProperty="ActualHeight"/>
+                    </i:Interaction.Behaviors>
+                    <Grid>
+                        <StackPanel Orientation="Horizontal">
+                            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,0" Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" Style="{DynamicResource MaterialDesignIconButton}" Command="{Binding ShowAddCommand}">
+                                <materialDesign:PackIcon Kind="add"/>
+                            </Button>
+                            <ItemsControl x:Name="HeaderTab" ItemsSource="{Binding CommunicateIos}"  Margin="2">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"></StackPanel>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <RadioButton Style="{DynamicResource MaterialDesignTabRadioButton}" IsChecked="{Binding IsSelected}" GroupName="Ios" Height="Auto">
+                                            <StackPanel Orientation="Horizontal">
+                                                <StackPanel>
+                                                    <TextBlock Style="{DynamicResource MaterialDesignHeadline6TextBlock}" Text="{Binding Title}" />
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Style="{DynamicResource MaterialDesignBody2TextBlock}" VerticalAlignment="Center" Text="{Binding Info}" />
+                                                        <ToggleButton Style="{DynamicResource MaterialDesignActionToggleButton}" IsHitTestVisible="False" Background="{x:Null}" VerticalAlignment="Center" IsChecked="{Binding IsIoOk}">
+                                                            <materialDesign:ToggleButtonAssist.OnContent>
+                                                                <materialDesign:PackIcon Kind="Link" Foreground="Green"></materialDesign:PackIcon>
+                                                            </materialDesign:ToggleButtonAssist.OnContent>
+                                                            <materialDesign:PackIcon Kind="ErrorOutline" Foreground="Red"></materialDesign:PackIcon>
+                                                        </ToggleButton>
+                                                    </StackPanel>
                                                 </StackPanel>
+                                                <Button  Style="{DynamicResource MaterialDesignIconButton}" Command="{Binding DeleteCommunicateCommand}">
+                                                    <materialDesign:PackIcon Kind="close"></materialDesign:PackIcon>
+                                                </Button>
                                             </StackPanel>
-                                            <Button  Style="{DynamicResource MaterialDesignIconButton}" Command="{Binding DeleteCommunicateCommand}">
-                                                <materialDesign:PackIcon Kind="close"></materialDesign:PackIcon>
-                                            </Button>                                            
-                                        </StackPanel>
-                                    </RadioButton>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </StackPanel>
-                    <Button HorizontalAlignment="Right" VerticalAlignment="Top" Margin="2" Style="{DynamicResource MaterialDesignIconButton}" Command="{Binding CloseCommand}">
-                        <materialDesign:PackIcon Kind="Close"/>
-                    </Button>
-                </Grid>
-            </materialDesign:ColorZone>
-            <ItemsControl Grid.Row="1" x:Name="FunctionTab"  ItemsSource="{Binding CommunicateIos}" Margin="2">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Grid/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Margin="5" Visibility="{Binding IsSelected, Converter={StaticResource VisibilityConverter}}">
-                            <Communicate:CommunicatePage DataContext="{Binding CommunicatePageModel}"/>
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+                                        </RadioButton>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                        <Button HorizontalAlignment="Right" VerticalAlignment="Top" Margin="2" Style="{DynamicResource MaterialDesignIconButton}" Command="{Binding CloseCommand}">
+                            <materialDesign:PackIcon Kind="Close"/>
+                        </Button>
+                    </Grid>
+                </materialDesign:ColorZone>
+                <ItemsControl Grid.Row="1" x:Name="FunctionTab"  
+                    ItemsSource="{Binding CommunicateIos}" Margin="0">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Grid/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Background="{DynamicResource MaterialDesignPaper}"
+                                  Visibility="{Binding IsSelected, Converter={StaticResource VisibilityConverter}}">
+                            <Grid Margin="5"  >
+                                <Communicate:CommunicatePage DataContext="{Binding CommunicatePageModel}"/>
+                            </Grid>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
         </Grid>
     </materialDesign:DialogHost>
 </Window>

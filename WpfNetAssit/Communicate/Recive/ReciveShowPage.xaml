@@ -46,6 +46,6 @@
             </StackPanel>
             <Button x:Name="ClearCount" Content="清计数" Margin="2" Command="{Binding ClearCountCommand}"/>
         </StackPanel>
-        <TextBox x:Name="MonitorTextBox" TextWrapping="Wrap" Text="{Binding DisplayString}" Grid.Row="1" IsEnabled="False"/>
+        <TextBox Margin="2" x:Name="MonitorTextBox" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Style="{DynamicResource MaterialDesignOutlinedTextBox}" Text="{Binding DisplayString}" Grid.Row="1"/>
     </Grid>
 </UserControl>

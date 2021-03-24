@@ -12,30 +12,33 @@
     <UserControl.Resources>
         <Converter:BoolReversConverter x:Key="BoolReversConverter"/>
     </UserControl.Resources>
+    <UserControl.DataContext>
+        <local:LogicalSendPageModel></local:LogicalSendPageModel>
+    </UserControl.DataContext>
     <Grid>
             <materialDesign:DrawerHost IsRightDrawerOpen="{Binding IsOpenHost, Mode=TwoWay}">
                 <materialDesign:DrawerHost.RightDrawerContent>
-                    <StackPanel MinWidth="300">
-                        <TextBlock Text="可选模板" Style="{DynamicResource MaterialDesignBody1TextBlock}"/>
-                        <ListBox Margin="10" MinHeight="200" MaxHeight="500"/>
-                    </StackPanel>
+                <StackPanel>
+                    <local:LogicalActionControlSettingPage DataContext="{Binding LogicalActionControlSettingPageModel}"/>
+
+                </StackPanel>
                 </materialDesign:DrawerHost.RightDrawerContent>
                 <Grid>
                     <Grid IsEnabled="{Binding IsRuningFrozen, Converter={StaticResource BoolReversConverter}}">
                         <materialDesign:Card Grid.Row="1">
                             <local:LogicalActionControl DataContext="{Binding LogicalActionControlModel}"/>
                         </materialDesign:Card>
-                        <ToggleButton IsChecked="{Binding IsOpenHost, Mode=TwoWay}" Style="{DynamicResource MaterialDesignHamburgerToggleButton}" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                        <ToggleButton IsChecked="{Binding IsOpenHost, Mode=TwoWay}" Command="{Binding OpenSettingCommand}" Style="{DynamicResource MaterialDesignHamburgerToggleButton}" HorizontalAlignment="Right" VerticalAlignment="Top"/>
                     </Grid>
-                <Button
-                    Style="{StaticResource MaterialDesignFloatingActionButton}"
-                    materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding IsRuningFrozen}"
-                    materialDesign:ButtonProgressAssist.Value="-1"
-                    materialDesign:ButtonProgressAssist.IsIndeterminate="True" 
-                    Command="{Binding StartCommand}">
-                    <materialDesign:PackIcon Kind="StateMachine"/>
-                </Button>
-            </Grid>
+                    <Button
+                        Style="{StaticResource MaterialDesignFloatingActionButton}"
+                        materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding IsRuningFrozen}"
+                        materialDesign:ButtonProgressAssist.Value="-1"
+                        materialDesign:ButtonProgressAssist.IsIndeterminate="True" 
+                        Command="{Binding StartCommand}">
+                        <materialDesign:PackIcon Kind="StateMachine"/>
+                    </Button>
+                </Grid>
             </materialDesign:DrawerHost>
     </Grid>
 </UserControl>

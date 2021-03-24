@@ -25,6 +25,6 @@
         <materialDesign:Card Grid.Column="1" Margin="10">
             <local:LogicalActionEditControl DataContext="{Binding SelectedActionBuilder.Param}"></local:LogicalActionEditControl>
         </materialDesign:Card>
-        <Button Style="{DynamicResource MaterialDesignFlatAccentBgButton}" IsEnabled="{Binding IsSelected}" Command="{Binding AddActionCommand}" Grid.Row="1" Grid.ColumnSpan="2" Content="增加" HorizontalAlignment="Center"></Button>
+        <Button Style="{DynamicResource MaterialDesignFlatAccentBgButton}" IsEnabled="{Binding IsSelected}" Command="{Binding AddEndActionCommand}" Grid.Row="1" Grid.ColumnSpan="2" Content="增加" HorizontalAlignment="Center"></Button>
     </Grid>
 </UserControl>

@@ -24,12 +24,16 @@
             <DataTemplate DataType="{x:Type baseaction:SendActionParam}">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="发送数据：" VerticalAlignment="Center"></TextBlock>
+                        <TextBlock Text="发送数据：" Style="{DynamicResource MaterialDesignBody1TextBlock}" VerticalAlignment="Center"></TextBlock>
                         <TextBox MinWidth="100" VerticalAlignment="Center" Text="{Binding Data, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <CheckBox Content="附加\\r" VerticalAlignment="Center" IsChecked="{Binding IsPlusR}"></CheckBox>
-                        <CheckBox Content="附加\n" VerticalAlignment="Center" IsChecked="{Binding IsPlusN}"></CheckBox>
+                        <ToggleButton Style="{DynamicResource MaterialDesignSwitchToggleButton}" Margin="5" VerticalAlignment="Center" IsChecked="{Binding IsPlusR}"></ToggleButton>
+                        <TextBlock Text="附加\r" Style="{DynamicResource MaterialDesignBody1TextBlock}" Margin="5" VerticalAlignment="Center"></TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <ToggleButton Style="{DynamicResource MaterialDesignSwitchToggleButton}" Margin="5" VerticalAlignment="Center" IsChecked="{Binding IsPlusN}"></ToggleButton>
+                        <TextBlock Text="附加\n" Style="{DynamicResource MaterialDesignBody1TextBlock}" Margin="5" VerticalAlignment="Center" ></TextBlock>
                     </StackPanel>
 
                 </StackPanel>

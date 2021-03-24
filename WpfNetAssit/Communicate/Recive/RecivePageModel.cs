@@ -16,36 +16,5 @@ namespace WpfNetAssit.Communicate.Recive
             set {Set("RecivieShowPageModel", ref reciveShowPageModel, value); } 
         }
 
-        Task recvTask = null;
-        bool IsRun = false;
-        IoConnect.ICommunicateIo Io = null;
-        public void StartRecive(IoConnect.ICommunicateIo io)
-        {
-            recvTask = Task.Run(() => {
-                Io = io;
-                byte[] buf = new byte[0x1000];
-                int size = 0;
-                IsRun = true;
-                while (IsRun)
-                {
-                    bool ret = io.Read(buf, ref size);
-                    if (ret && size > 0)
-                    {
-                        byte[] data = buf.Take(size).ToArray();
-                        ReciveShowPageModel.RecvData(data);
-                    }
-                }
-            });
-        }
-
-        public void StopRecive()
-        {
-            if (recvTask != null && !recvTask.IsCompleted)
-            {
-                IsRun = false;
-                Io.Close();
-                recvTask.Wait();
-            }
-        }
     }
 }

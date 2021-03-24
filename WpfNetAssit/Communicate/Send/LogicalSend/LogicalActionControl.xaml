@@ -27,18 +27,25 @@
                 <materialDesign:PackIcon Kind="DeleteEmpty" />
             </Button>
         </StackPanel>
-        <TreeView x:Name="ActionTree" Grid.Row="1" AllowDrop="True" ItemsSource="{Binding RootAction.ChildActions}" Style="{DynamicResource MaterialDesignTreeView}">
+        <TreeView x:Name="ActionTree" Grid.Row="1" AllowDrop="True" ItemsSource="{Binding RootAction.ChildActions}" ItemContainerStyle="{DynamicResource expand}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectedItemChanged">
                     <command:EventToCommand Command="{Binding SelectedItemChangedCommand}" PassEventArgsToCommand="True"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
+            <TreeView.Resources>
+                <Style x:Key="expand" TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource MaterialDesignTreeViewItem}">
+                    <Setter Property="IsExpanded" Value="True" />
+                </Style>
+            </TreeView.Resources>
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding ChildActions}">
+                    <HierarchicalDataTemplate.Triggers>
+                    </HierarchicalDataTemplate.Triggers>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding Name}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                         <TextBlock Text="{Binding Param.Info}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <materialDesign:PackIcon Kind="Set" Margin="2" Visibility="{Binding IsContainer, Converter={StaticResource VisibilityConverter}}" VerticalAlignment="Center"/>
+                        <materialDesign:PackIcon Kind="Set" Foreground="{DynamicResource AttentionToActionBrush}" Margin="2" Visibility="{Binding IsContainer, Converter={StaticResource VisibilityConverter}}" VerticalAlignment="Center"/>
 
                         <materialDesign:PopupBox StaysOpen="True">
                             <materialDesign:PopupBox.ToggleContent>

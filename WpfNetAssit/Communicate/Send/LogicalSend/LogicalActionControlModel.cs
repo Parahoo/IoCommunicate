@@ -64,14 +64,11 @@ namespace WpfNetAssit.Communicate.Send.LogicalSend
             RootAction.ChildActions.Clear();
         }
 
-        private async void AddAction()
+        private  void AddAction()
         {
             var vm = new LogicalActionAddControlModel();
-            vm.AddActionToTarget = new RelayCommand(() => {
-                InsertNewAction(vm.NewAction);
-                MaterialDesignThemes.Wpf.DialogHost.Close(null);
-            });
-            await MaterialDesignThemes.Wpf.DialogHost.Show(vm);
+            vm.AddActionToTarget = InsertNewAction; //new RelayCommand<ObservableLogicalAction>();
+             MaterialDesignThemes.Wpf.DialogHost.Show(vm);
         }
         private ObservableLogicalAction selectedAction;
         private void InsertNewAction(ObservableLogicalAction newAction)
@@ -85,6 +82,7 @@ namespace WpfNetAssit.Communicate.Send.LogicalSend
             }
             else
                 RootAction.Add(newAction);
+            MaterialDesignThemes.Wpf.DialogHost.CloseDialogCommand.Execute(null, null);
         }
 
         private void SelectedItemChanged(RoutedPropertyChangedEventArgs<object> e)

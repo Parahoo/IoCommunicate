@@ -24,29 +24,32 @@ namespace WpfNetAssit.Communicate
             set { Set("SendPageModel", ref sendPageModel, value); }
         }
 
+        private Action<byte[]> ProcessRecv;
+
 
         public CommunicatePageModel()
         {
-
-        }
-
-       
+            ProcessRecv += RecivePageModel.ReciveShowPageModel.RecvData;
+        }       
 
         public void StartCommunicate(IoConnect.ICommunicateIo io)
         {
-            RecivePageModel.StartRecive(io);
             SendPageModel.SetIo(io);
         }
 
         public void StopCommunicate()
         {
-            RecivePageModel.StopRecive();
             SendPageModel.SetIo(null);
         }
 
         public object Clone()
         {
             return MemberwiseClone();
+        }
+
+        internal void ProcessRecvData(byte[] data)
+        {
+            ProcessRecv?.Invoke(data);
         }
     }
 }

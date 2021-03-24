@@ -38,22 +38,22 @@ namespace WpfNetAssit.Communicate.Send.LogicalSend
 
         public ObservableLogicalAction NewAction { get; private set; }
 
-        public ICommand AddActionCommand { get; }
+        public ICommand AddEndActionCommand { get; }
 
-        public ICommand AddActionToTarget { get; set; }
+        public Action<ObservableLogicalAction> AddActionToTarget;
 
 
         public LogicalActionAddControlModel()
         {
             InitAvaiableActionBuilders();
 
-            AddActionCommand = new RelayCommand(AddAction);
+            AddEndActionCommand = new RelayCommand(AddEndAction);
         }
 
-        private void AddAction()
+        private void AddEndAction()
         {
             NewAction = SelectedActionBuilder?.Build();
-            AddActionToTarget?.Execute(NewAction);
+            AddActionToTarget?.Invoke(NewAction);
         }
 
         public void InitAvaiableActionBuilders()

@@ -54,13 +54,67 @@ namespace WpfNetAssit.Pages
         public ICommand DeleteCommunicateCommand { get; }
         public ICommand ParentDeleteCommand { get; set; }
 
+        private Action<byte[]> ProcessRecvData;
+
         public CommunicateModel()
         {
             DeleteCommunicateCommand = new RelayCommand(DeleteCommunicate);
+            ProcessRecvData += communicatePageModel.ProcessRecvData;
+        }
+
+        Task recvTask = null;
+        bool IsRun = false;
+        IoConnect.ICommunicateIo Io = null;
+        private void StartRecive(IoConnect.ICommunicateIo io)
+        {
+            Io = io;
+            recvTask = Task.Run(() => {
+                byte[] buf = new byte[0x1000];
+                int size = 0;
+                IsRun = true;
+                while (IsRun)
+                {
+                    bool ret = io.Read(buf, ref size);
+                    if (!ret)
+                    {
+                        IsIoOk = false;
+                        Task.Delay(100);
+                    }
+                    else
+                    {
+                        if (IsIoOk == false)
+                            IsIoOk = true;
+                    }
+
+                    if (ret && size > 0)
+                    {
+                        byte[] data = buf.Take(size).ToArray();
+                        ProcessRecvData?.Invoke(data);
+                    }
+                }
+                IsRun = false;
+            });
+        }
+
+        private void StopRecive()
+        {
+            if (recvTask != null && !recvTask.IsCompleted)
+            {
+                IsRun = false;
+                Io.Close();
+                recvTask.Wait();
+            }
+        }
+
+        internal void StartCommunicate(ICommunicateIo io)
+        {
+            communicatePageModel.StartCommunicate(io);
+            StartRecive(io);
         }
 
         private void DeleteCommunicate()
         {
+            StopRecive();
             communicatePageModel.StopCommunicate();
             ParentDeleteCommand?.Execute(this);
         }
@@ -114,7 +168,7 @@ namespace WpfNetAssit.Pages
             communicate.CommunicatePageModel.SendPageModel.LogicalSendPageModel.LogicalActionControlModel.BuildFrom(UserSetting.Default.RootBuilder);
             communicate.ParentDeleteCommand = new RelayCommand<CommunicateModel>(DeleteCommunicate);
             CommunicateIos.Add(communicate);
-            communicate.CommunicatePageModel.StartCommunicate(io);
+            communicate.StartCommunicate(io);
             communicate.Info = io.LinkInfo;
             communicate.IsIoOk = io.IsLinkOk;
 

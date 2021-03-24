@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using WpfNetAssit.IoConnect;
 using WpfNetAssit.LogicalAction;
+using WpfNetAssit.LogicalAction.ControlAction;
 
 namespace WpfNetAssit.Communicate.Send.LogicalSend
 {
@@ -37,13 +38,33 @@ namespace WpfNetAssit.Communicate.Send.LogicalSend
             set { Set("LogicalActionControlModel", ref logicalActionControlModel, value); }
         }
 
+        private LogicalActionControlSettingPageModel logicalActionControlSettingPageModel = new LogicalActionControlSettingPageModel();
+        public LogicalActionControlSettingPageModel LogicalActionControlSettingPageModel
+        {
+            get { return logicalActionControlSettingPageModel; }
+            set { Set("LogicalActionControlSettingPageModel", ref logicalActionControlSettingPageModel, value); }
+        }
+
+
         private ICommunicateIo Io = null;
         public void SetIo(ICommunicateIo io) { Io = io; }
 
         public ICommand StartCommand { get; }
+
+        public ICommand OpenSettingCommand { get; }
+
         public LogicalSendPageModel()
         {
             StartCommand = new RelayCommand(Start);
+            OpenSettingCommand = new RelayCommand(OpenSetting);
+        }
+
+        private void OpenSetting()
+        {
+            LogicalActionControlSettingPageModel.RootAction = LogicalActionControlModel.RootAction;
+            LogicalActionControlSettingPageModel.Open((ControlAction controlAction)=> {
+                LogicalActionControlModel.RootAction = controlAction;
+            });
         }
 
         Task logicSendTask = null;
