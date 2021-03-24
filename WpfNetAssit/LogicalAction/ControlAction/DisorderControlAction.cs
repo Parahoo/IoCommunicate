@@ -94,13 +94,26 @@ namespace WpfNetAssit.LogicalAction.ControlAction
 
         public override bool Act(object datacontext)
         {
+            bool ret = false;
+            Dictionary<string, object> dict = datacontext as Dictionary<string, object>;
+            Action<string, string> logfunc = dict["log"] as Action<string, string>;
+            string tab = dict["tab"] as string;
+            dict["tab"] = tab + "  ";
+
             if (param.IsDisorder)
             {
+                logfunc("乱序：", tab);
                 var actions = DisorderActions(ChildActions);
-                return DoChildAction(actions, datacontext);
+                ret = DoChildAction(actions, datacontext);
             }
             else
-                return DoChildAction(ChildActions, datacontext);
+            {
+                logfunc("顺序：", tab);
+                ret = DoChildAction(ChildActions, datacontext);
+            }
+
+            dict["tab"] = tab;
+            return ret;
         }
 
         override public LogicalActionBuilder SerializeBuilder()

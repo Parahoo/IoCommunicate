@@ -10,35 +10,41 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
+        <Converter:VisibilityConverter x:Key="VisibilityConverter"/>
         <Converter:BoolReversConverter x:Key="BoolReversConverter"/>
     </UserControl.Resources>
     <UserControl.DataContext>
         <local:LogicalSendPageModel></local:LogicalSendPageModel>
     </UserControl.DataContext>
     <Grid>
-            <materialDesign:DrawerHost IsRightDrawerOpen="{Binding IsOpenHost, Mode=TwoWay}">
-                <materialDesign:DrawerHost.RightDrawerContent>
+        <materialDesign:DrawerHost IsRightDrawerOpen="{Binding IsOpenHost, Mode=TwoWay}">
+            <materialDesign:DrawerHost.RightDrawerContent>
                 <StackPanel>
                     <local:LogicalActionControlSettingPage DataContext="{Binding LogicalActionControlSettingPageModel}"/>
-
                 </StackPanel>
-                </materialDesign:DrawerHost.RightDrawerContent>
-                <Grid>
-                    <Grid IsEnabled="{Binding IsRuningFrozen, Converter={StaticResource BoolReversConverter}}">
-                        <materialDesign:Card Grid.Row="1">
-                            <local:LogicalActionControl DataContext="{Binding LogicalActionControlModel}"/>
-                        </materialDesign:Card>
-                        <ToggleButton IsChecked="{Binding IsOpenHost, Mode=TwoWay}" Command="{Binding OpenSettingCommand}" Style="{DynamicResource MaterialDesignHamburgerToggleButton}" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-                    </Grid>
-                    <Button
+            </materialDesign:DrawerHost.RightDrawerContent>
+            <Grid>
+                <Grid IsEnabled="{Binding IsRuningFrozen, Converter={StaticResource BoolReversConverter}}">
+                    <materialDesign:Card Grid.Row="1">
+                        <local:LogicalActionControl DataContext="{Binding LogicalActionControlModel}"/>
+                    </materialDesign:Card>
+                    <ToggleButton IsChecked="{Binding IsOpenHost, Mode=TwoWay}" Command="{Binding OpenSettingCommand}" Style="{DynamicResource MaterialDesignHamburgerToggleButton}" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                </Grid>
+                <Button
                         Style="{StaticResource MaterialDesignFloatingActionButton}"
                         materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding IsRuningFrozen}"
                         materialDesign:ButtonProgressAssist.Value="-1"
                         materialDesign:ButtonProgressAssist.IsIndeterminate="True" 
                         Command="{Binding StartCommand}">
-                        <materialDesign:PackIcon Kind="StateMachine"/>
-                    </Button>
-                </Grid>
-            </materialDesign:DrawerHost>
+                    <materialDesign:PackIcon Kind="StateMachine"/>
+                </Button>
+                <TextBox Margin="2" x:Name="LogTextBox" IsReadOnly="True"  Width="300" HorizontalAlignment="Right"
+                         Visibility="{Binding IsRuningFrozen, Converter={StaticResource VisibilityConverter}}" 
+                         TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" 
+                         Style="{DynamicResource MaterialDesignOutlinedTextBox}" 
+                         Text="{Binding DisplayLogString}"/>
+            </Grid>
+
+        </materialDesign:DrawerHost>
     </Grid>
 </UserControl>

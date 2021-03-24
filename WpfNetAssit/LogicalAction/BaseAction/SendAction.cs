@@ -104,10 +104,17 @@ namespace WpfNetAssit.LogicalAction.BaseAction
         {
             var dict = datacontext as Dictionary<string, object>;
 
+            Action<string, string> logfunc = dict["log"] as Action<string, string>;
+            string tab = dict["tab"] as string;
+            logfunc(string.Format("send: {0}", Param.Info), tab);
+
             var buf = Param.GetData();
             int writesize = buf.Length;
             var io = dict["io"] as ICommunicateIo;
-            return io.Write(buf, ref writesize);
+            var ret = io.Write(buf, ref writesize);
+
+            logfunc(string.Format("send: {0}", ret ? "ok":"faild"), tab);
+            return ret;
         }
 
         override public LogicalActionBuilder SerializeBuilder()

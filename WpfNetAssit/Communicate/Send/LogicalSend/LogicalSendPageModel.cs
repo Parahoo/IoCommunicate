@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -45,6 +46,26 @@ namespace WpfNetAssit.Communicate.Send.LogicalSend
             set { Set("LogicalActionControlSettingPageModel", ref logicalActionControlSettingPageModel, value); }
         }
 
+        private string displayLogString = "";
+        public string DisplayLogString
+        {
+            get { return displayLogString; }
+            set { Set("DisplayLogString", ref displayLogString, value); }
+        }
+
+        /// <summary>
+        /// 显示接收到的数据
+        /// </summary>
+        /// <param name="buf"></param>
+        /// <param name="size"></param>
+        private void MonitorLog(string log)
+        {
+            if (DisplayLogString.Length > 10000)
+                DisplayLogString = DisplayLogString.Substring(2500) + log;
+            else
+                DisplayLogString += log;
+        }
+
 
         private ICommunicateIo Io = null;
         public void SetIo(ICommunicateIo io) { Io = io; }
@@ -77,24 +98,45 @@ namespace WpfNetAssit.Communicate.Send.LogicalSend
                 cancellationTokensource = new CancellationTokenSource();
                 CancellationToken cancellationToken = cancellationTokensource.Token;
 
-                Dictionary<string, object> datacontext = new Dictionary<string, object>();
-                datacontext.Add("io", Io);
-                datacontext.Add("canceltoken", cancellationToken);
-
-                logicSendTask = Task.Run(() =>
+                if (!Directory.Exists("./log/"))
+                    Directory.CreateDirectory("./log/");
+                string logfilename = "./log/" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".log";
+                FileStream fs = new FileStream(logfilename, FileMode.Create);
+                StreamWriter streamWriter = new StreamWriter(fs);
+                try
                 {
-                    try
-                    {
-                        LogicalActionControlModel.RootAction.Act(datacontext); 
+                    Dictionary<string, object> datacontext = new Dictionary<string, object>();
+                    datacontext.Add("io", Io);
+                    datacontext.Add("canceltoken", cancellationToken);
+                    datacontext.Add("log", new Action<string,string>((string log, string tab) =>
+                     {
+                         string text = tab + log;
+                         MonitorLog(text+"\r\n");
+                         streamWriter.WriteLine(DateTime.Now.ToString("[HH:mm:ss.fff] ")+ text);
+                         streamWriter.Flush();
+                     }));
+                    datacontext.Add("tab", "");
 
-                    }
-                    catch (Exception)
+                    DisplayLogString = "";
+                    logicSendTask = Task.Run(() =>
                     {
+                        try
+                        {
+                            LogicalActionControlModel.RootAction.Act(datacontext); 
+                        }
+                        catch (Exception)
+                        {
 
-                    }
-                    IsRuningFrozen = false;
-                }, cancellationToken);
-                await logicSendTask;
+                        }
+                        IsRuningFrozen = false;
+                    }, cancellationToken);
+                    await logicSendTask;
+                }
+                finally
+                {
+                    streamWriter.Dispose();
+                    fs.Dispose();
+                }
             }
             else
             {

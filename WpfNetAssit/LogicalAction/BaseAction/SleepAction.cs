@@ -79,6 +79,9 @@ namespace WpfNetAssit.LogicalAction.BaseAction
             var dict = datacontext as Dictionary<string, object>;
             var cancel = (CancellationToken)dict["canceltoken"];
 
+            Action<string, string> logfunc = dict["log"] as Action<string, string>;
+            string tab = dict["tab"] as string;
+            logfunc(string.Format("Sleep {0} ms...", Param.SleepMs), tab);
             Task.Delay(Param.SleepMs, cancel).Wait();
             return true;
         }

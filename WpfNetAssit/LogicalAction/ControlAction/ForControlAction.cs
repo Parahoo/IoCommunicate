@@ -92,10 +92,17 @@ namespace WpfNetAssit.LogicalAction.ControlAction
 
         override public bool Act(object datacontext)
         {
+            Dictionary<string, object> dict = datacontext as Dictionary<string, object>;
+            Action<string, string> logfunc = dict["log"] as Action<string, string>;
+            string tab = dict["tab"] as string;
+
             for(int i = 0; i < param.Count; i++)
             {
+                logfunc(string.Format("第{0}次循环", i+1), tab);
+                dict["tab"] = tab + "  ";
                 if (!DoChildAction(ChildActions, datacontext))
                     return false;
+                dict["tab"] = tab;
             }
             return true;
         }
