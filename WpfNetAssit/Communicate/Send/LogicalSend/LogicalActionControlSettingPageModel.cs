@@ -64,7 +64,7 @@ namespace WpfNetAssit.Communicate.Send.LogicalSend
 
         public LogicalActionControlSettingPageModel()
         {
-            LoadAvaiableActionTemplate();
+            LoadAvaiableActionTemplate(); IsCoverSave = CheckCoverSave(newFileName);
             ApplyTemplateCommand = new RelayCommand(ApplyTemplate);
             SaveTemplateCommand = new RelayCommand(SaveTemplate);
             CoverSaveTemplateCommand = new RelayCommand(CoverSaveTemplate);
@@ -74,7 +74,7 @@ namespace WpfNetAssit.Communicate.Send.LogicalSend
 
         private void ImportTemplateFile()
         {
-            LoadAvaiableActionTemplate();
+            LoadAvaiableActionTemplate(); IsCoverSave = CheckCoverSave(newFileName);
         }
 
         private void DeleteTemplateFile()
@@ -84,7 +84,7 @@ namespace WpfNetAssit.Communicate.Send.LogicalSend
             {
                 File.Delete(filename);
             }
-            LoadAvaiableActionTemplate();
+            LoadAvaiableActionTemplate(); IsCoverSave = CheckCoverSave(newFileName);
         }
 
         string GetFullPath(string filename)
@@ -125,12 +125,13 @@ namespace WpfNetAssit.Communicate.Send.LogicalSend
 
             ControlActionBuilder builder = RootAction.SerializeBuilder() as ControlActionBuilder;
             XamlSerializeHelper<ControlActionBuilder>.Save(filename, builder);
-            LoadAvaiableActionTemplate();
+            LoadAvaiableActionTemplate(); IsCoverSave = CheckCoverSave(newFileName);
         }
 
         internal void Open(Action<ControlAction> p)
         {
-            LoadAvaiableActionTemplate();
+            LoadAvaiableActionTemplate(); 
+            IsCoverSave = CheckCoverSave(newFileName);
             Apply = p;
         }
 
