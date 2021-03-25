@@ -23,8 +23,17 @@
             <Button  BorderThickness="0" Style="{DynamicResource MaterialDesignFlatButton}" IsEnabled="{Binding IsItemSelected}" Command="{Binding DeleteActionCommand}">
                 <materialDesign:PackIcon Kind="Minus" />
             </Button>
-            <Button  BorderThickness="0" Style="{DynamicResource MaterialDesignFlatButton}" IsEnabled="{Binding RootAction.ChildActions.Count}" Command="{Binding DeleteAllActionsCommand}">
-                <materialDesign:PackIcon Kind="DeleteEmpty" />
+            <Button  BorderThickness="0" Style="{DynamicResource MaterialDesignFlatButton}" IsEnabled="{Binding IsItemCanMoveUp}" Command="{Binding ActionMoveUpCommand}">
+                <materialDesign:PackIcon Kind="ArrowUp" />
+            </Button>
+            <Button  BorderThickness="0" Style="{DynamicResource MaterialDesignFlatButton}" IsEnabled="{Binding IsItemCanMoveDown}" Command="{Binding ActionMoveDownCommand}">
+                <materialDesign:PackIcon Kind="ArrowDown" />
+            </Button>
+            <Button  BorderThickness="0" Style="{DynamicResource MaterialDesignFlatButton}" IsEnabled="{Binding IsItemSelected}" Command="{Binding ActionCopyCommand}">
+                <materialDesign:PackIcon Kind="ContentCopy" />
+            </Button>
+            <Button  BorderThickness="0" Style="{DynamicResource MaterialDesignFlatButton}" IsEnabled="{Binding IsEnablePaste}" Command="{Binding ActionPasteCommand}">
+                <materialDesign:PackIcon Kind="ContentPaste" />
             </Button>
         </StackPanel>
         <TreeView x:Name="ActionTree" Grid.Row="1" AllowDrop="True" ItemsSource="{Binding RootAction.ChildActions}" ItemContainerStyle="{DynamicResource expand}">

@@ -54,6 +54,7 @@ namespace WpfNetAssit.Communicate.Send.LogicalSend
         {
             NewAction = SelectedActionBuilder?.Build();
             AddActionToTarget?.Invoke(NewAction);
+            MaterialDesignThemes.Wpf.DialogHost.CloseDialogCommand.Execute(null, null);
         }
 
         public void InitAvaiableActionBuilders()

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WpfNetAssit.Communicate.Recive"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-             xmlns:Text="clr-namespace:System.Text;assembly=mscorlib" xmlns:Converter="clr-namespace:WpfNetAssit.Converter" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" x:Class="WpfNetAssit.Communicate.Recive.ReciveShowPage"
+             xmlns:Text="clr-namespace:System.Text;assembly=mscorlib" xmlns:Converter="clr-namespace:WpfNetAssit.Converter" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:pages="clr-namespace:WpfNetAssit.Pages" x:Class="WpfNetAssit.Communicate.Recive.ReciveShowPage"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -46,6 +46,6 @@
             </StackPanel>
             <Button x:Name="ClearCount" Content="清计数" Margin="2" Command="{Binding ClearCountCommand}"/>
         </StackPanel>
-        <TextBox Margin="2" x:Name="MonitorTextBox" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Style="{DynamicResource MaterialDesignOutlinedTextBox}" Text="{Binding DisplayString}" Grid.Row="1"/>
+        <pages:TextMonitor Margin="2" x:Name="MonitorTextBox" DataContext="{Binding TextMonitorModel}" Grid.Row="1"/>
     </Grid>
 </UserControl>

@@ -40,6 +40,10 @@ namespace WpfNetAssit.Communicate.Send.LogicalSend
         public ICommand AddActionCommand { get; }
         public ICommand DeleteActionCommand { get; }
         public ICommand DeleteAllActionsCommand { get; }
+        public ICommand ActionMoveUpCommand { get; }
+        public ICommand ActionMoveDownCommand { get; }
+        public ICommand ActionCopyCommand { get; }
+        public ICommand ActionPasteCommand { get; }
 
         public LogicalActionControlModel()
         {
@@ -48,6 +52,67 @@ namespace WpfNetAssit.Communicate.Send.LogicalSend
             AddActionCommand = new RelayCommand(AddAction);
             DeleteActionCommand = new RelayCommand(DeleteAction);
             DeleteAllActionsCommand = new RelayCommand(DeleteAllActions);
+
+            ActionMoveUpCommand = new RelayCommand(ActionMoveUp);
+            ActionMoveDownCommand = new RelayCommand(ActionMoveDown);
+            ActionCopyCommand = new RelayCommand(ActionCopy);
+            ActionPasteCommand = new RelayCommand(ActionPaste);
+        }
+
+        public bool IsItemCanMoveUp { get; set; } = false;
+        private void ActionMoveUp()
+        {
+            if (selectedAction != null)
+            {
+                var target = selectedAction;
+                var parent = selectedAction.Parent;
+                int index = parent.ChildActions.IndexOf(target);
+                if (index > 0)
+                {
+                    parent.ChildActions.Move(index, index - 1);
+                }
+                IsItemCanMoveUp = index > 1; 
+                IsItemCanMoveDown = true;
+            }
+        }
+
+
+        public bool IsItemCanMoveDown { get; set; } = false;
+        private void ActionMoveDown()
+        {
+            if (selectedAction != null)
+            {
+                var target = selectedAction;
+                var parent = selectedAction.Parent;
+                int index = parent.ChildActions.IndexOf(target);
+                if (index != parent.ChildActions.Count-1)
+                {
+                    parent.ChildActions.Move(index, index + 1);
+                }
+                IsItemCanMoveUp = true;
+                IsItemCanMoveDown = index < parent.ChildActions.Count - 2;
+            }
+        }
+
+        public bool IsEnablePaste { get; set; } = false;
+        private ObservableLogicalAction CopyActionSrc;
+        private void ActionCopy()
+        {
+            if (selectedAction != null)
+            {
+                CopyActionSrc = selectedAction.SerializeBuilder().Build();
+                IsEnablePaste = true;
+            }
+        }
+
+        private void ActionPaste()
+        {
+            if (selectedAction != null && CopyActionSrc != null)
+            {
+                var builder = CopyActionSrc.SerializeBuilder();
+                var action = builder.Build();
+                InsertNewAction(action);
+            }
         }
 
         private void DeleteAction()
@@ -78,18 +143,37 @@ namespace WpfNetAssit.Communicate.Send.LogicalSend
                 if (selectedAction.IsContainer)
                     selectedAction.Add(newAction);
                 else
-                    selectedAction.Parent.Add(newAction);
+                {
+                    int index = selectedAction.Parent.ChildActions.IndexOf(selectedAction);
+                    selectedAction.Parent.Insert(index+1,newAction);
+                }
             }
             else
                 RootAction.Add(newAction);
-            MaterialDesignThemes.Wpf.DialogHost.CloseDialogCommand.Execute(null, null);
         }
 
         private void SelectedItemChanged(RoutedPropertyChangedEventArgs<object> e)
         {
             selectedAction = e.NewValue as ObservableLogicalAction;
             IsItemSelected = e.NewValue != null;
+            IsEnablePaste = (e.NewValue != null) && (CopyActionSrc != null);
 
+            CheckItemCanMoveUpDown(selectedAction);
+        }
+
+        private void CheckItemCanMoveUpDown(ObservableLogicalAction action)
+        {
+            if(action == null)
+            {
+                IsItemCanMoveUp = false;
+                IsItemCanMoveDown = false;
+            }
+            else
+            {
+                int index = action.Parent.ChildActions.IndexOf(action);
+                IsItemCanMoveUp = index > 0;
+                IsItemCanMoveDown = index < action.Parent.ChildActions.Count - 1;
+            }
         }
 
         public void BuildFrom(ControlActionBuilder rootbuild)

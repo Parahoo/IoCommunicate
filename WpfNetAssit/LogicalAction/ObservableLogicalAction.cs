@@ -67,5 +67,11 @@ namespace WpfNetAssit.LogicalAction
             child.Parent = this;
             ChildActions.Add(child);
         }
+
+        public void Insert(int index, ObservableLogicalAction child)
+        {
+            child.Parent = this;
+            ChildActions.Insert(index, child);
+        }
     }
 }

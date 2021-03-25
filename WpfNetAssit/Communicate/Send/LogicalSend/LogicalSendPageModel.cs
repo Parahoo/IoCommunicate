@@ -11,6 +11,7 @@ using System.Windows.Input;
 using WpfNetAssit.IoConnect;
 using WpfNetAssit.LogicalAction;
 using WpfNetAssit.LogicalAction.ControlAction;
+using WpfNetAssit.Pages;
 
 namespace WpfNetAssit.Communicate.Send.LogicalSend
 {
@@ -31,6 +32,13 @@ namespace WpfNetAssit.Communicate.Send.LogicalSend
             set { Set("IsRuningFrozen", ref isRuningFrozen, value); }
         }
 
+        private bool isOpenLogView = false;
+        public bool IsOpenLogView
+        {
+            get { return isOpenLogView; }
+            set { Set("IsOpenLogView", ref isOpenLogView, value); }
+        }
+
 
         private LogicalActionControlModel logicalActionControlModel = new LogicalActionControlModel();
         public LogicalActionControlModel LogicalActionControlModel
@@ -46,24 +54,11 @@ namespace WpfNetAssit.Communicate.Send.LogicalSend
             set { Set("LogicalActionControlSettingPageModel", ref logicalActionControlSettingPageModel, value); }
         }
 
-        private string displayLogString = "";
-        public string DisplayLogString
+        private TextMonitorModel textMonitorModel = new TextMonitorModel();
+        public TextMonitorModel TextMonitorModel
         {
-            get { return displayLogString; }
-            set { Set("DisplayLogString", ref displayLogString, value); }
-        }
-
-        /// <summary>
-        /// 显示接收到的数据
-        /// </summary>
-        /// <param name="buf"></param>
-        /// <param name="size"></param>
-        private void MonitorLog(string log)
-        {
-            if (DisplayLogString.Length > 10000)
-                DisplayLogString = DisplayLogString.Substring(2500) + log;
-            else
-                DisplayLogString += log;
+            get { return textMonitorModel; }
+            set { Set("TextMonitorModel", ref textMonitorModel, value); }
         }
 
 
@@ -94,7 +89,8 @@ namespace WpfNetAssit.Communicate.Send.LogicalSend
         {
             if (isRuningFrozen == false)
             {
-                IsRuningFrozen = true; 
+                IsRuningFrozen = true;
+                IsOpenLogView = true;
                 cancellationTokensource = new CancellationTokenSource();
                 CancellationToken cancellationToken = cancellationTokensource.Token;
 
@@ -111,13 +107,13 @@ namespace WpfNetAssit.Communicate.Send.LogicalSend
                     datacontext.Add("log", new Action<string,string>((string log, string tab) =>
                      {
                          string text = tab + log;
-                         MonitorLog(text+"\r\n");
+                         TextMonitorModel.MonitorData(text+"\r\n");
                          streamWriter.WriteLine(DateTime.Now.ToString("[HH:mm:ss.fff] ")+ text);
                          streamWriter.Flush();
                      }));
                     datacontext.Add("tab", "");
 
-                    DisplayLogString = "";
+                    TextMonitorModel.ClearMonitor();
                     logicSendTask = Task.Run(() =>
                     {
                         try
@@ -129,6 +125,7 @@ namespace WpfNetAssit.Communicate.Send.LogicalSend
 
                         }
                         IsRuningFrozen = false;
+                        IsOpenLogView = false;
                     }, cancellationToken);
                     await logicSendTask;
                 }

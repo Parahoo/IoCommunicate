@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using WpfNetAssit.Pages;
 
 namespace WpfNetAssit.Communicate.Recive
 {
@@ -29,7 +30,14 @@ namespace WpfNetAssit.Communicate.Recive
         private Encoding encoding = Encoding.UTF8;
 
         [System.Xml.Serialization.XmlIgnore]
-        public string DisplayString { get; set; } = "";
+        private TextMonitorModel textMonitorModel = new TextMonitorModel();
+        [System.Xml.Serialization.XmlIgnore]
+        public TextMonitorModel TextMonitorModel
+        {
+            get { return textMonitorModel; }
+            set { Set("TextMonitorModel", ref textMonitorModel, value); }
+        }
+
 
         [System.Xml.Serialization.XmlIgnore]
         public ICommand ClearMonitorCommand { get; }
@@ -51,7 +59,8 @@ namespace WpfNetAssit.Communicate.Recive
 
         private void ClearMonitor()
         {
-            DisplayString = "";
+            TextMonitorModel.ClearMonitor();
+
         }
 
         private void ClearCount()
@@ -93,10 +102,7 @@ namespace WpfNetAssit.Communicate.Recive
         private void MonitorData(byte[] data)
         {
             string t = TransToString(data);
-            if(DisplayString.Length > 10000)
-                DisplayString = DisplayString.Substring(2500)+(t);
-            else
-                DisplayString+=(t);
+            TextMonitorModel.MonitorData(t);
         }
 
     }

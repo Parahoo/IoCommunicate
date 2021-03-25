@@ -5,17 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WpfNetAssit.Communicate.Send.LogicalSend"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:Converter="clr-namespace:WpfNetAssit.Converter"
-             x:Class="WpfNetAssit.Communicate.Send.LogicalSend.LogicalSendPage"
+             xmlns:Converter="clr-namespace:WpfNetAssit.Converter" xmlns:pages="clr-namespace:WpfNetAssit.Pages"
+    x:Class="WpfNetAssit.Communicate.Send.LogicalSend.LogicalSendPage"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <Converter:VisibilityConverter x:Key="VisibilityConverter"/>
         <Converter:BoolReversConverter x:Key="BoolReversConverter"/>
     </UserControl.Resources>
-    <UserControl.DataContext>
-        <local:LogicalSendPageModel></local:LogicalSendPageModel>
-    </UserControl.DataContext>
     <Grid>
         <materialDesign:DrawerHost IsRightDrawerOpen="{Binding IsOpenHost, Mode=TwoWay}">
             <materialDesign:DrawerHost.RightDrawerContent>
@@ -24,13 +21,22 @@
                 </StackPanel>
             </materialDesign:DrawerHost.RightDrawerContent>
             <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
                 <Grid IsEnabled="{Binding IsRuningFrozen, Converter={StaticResource BoolReversConverter}}">
                     <materialDesign:Card Grid.Row="1">
                         <local:LogicalActionControl DataContext="{Binding LogicalActionControlModel}"/>
                     </materialDesign:Card>
-                    <ToggleButton IsChecked="{Binding IsOpenHost, Mode=TwoWay}" Command="{Binding OpenSettingCommand}" Style="{DynamicResource MaterialDesignHamburgerToggleButton}" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                    <StackPanel Orientation="Horizontal"  HorizontalAlignment="Right" VerticalAlignment="Top">
+                        <ToggleButton x:Name="OpenLogViewBtn" Style="{DynamicResource MaterialDesignIconButton}" IsChecked="{Binding IsOpenLogView}">
+                            <materialDesign:PackIcon Kind="History"></materialDesign:PackIcon>
+                        </ToggleButton>
+                        <ToggleButton IsChecked="{Binding IsOpenHost, Mode=TwoWay}" Command="{Binding OpenSettingCommand}" Style="{DynamicResource MaterialDesignHamburgerToggleButton}"/>
+                    </StackPanel>
                 </Grid>
-                <Button
+                <Button Grid.ColumnSpan="2"
                         Style="{StaticResource MaterialDesignFloatingActionButton}"
                         materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding IsRuningFrozen}"
                         materialDesign:ButtonProgressAssist.Value="-1"
@@ -38,11 +44,7 @@
                         Command="{Binding StartCommand}">
                     <materialDesign:PackIcon Kind="StateMachine"/>
                 </Button>
-                <TextBox Margin="2" x:Name="LogTextBox" IsReadOnly="True"  Width="300" HorizontalAlignment="Right"
-                         Visibility="{Binding IsRuningFrozen, Converter={StaticResource VisibilityConverter}}" 
-                         TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" 
-                         Style="{DynamicResource MaterialDesignOutlinedTextBox}" 
-                         Text="{Binding DisplayLogString}"/>
+                <pages:TextMonitor Grid.Column="1" Margin="2" x:Name="LogTextBox"  Width="300" DataContext="{Binding TextMonitorModel}" Visibility="{Binding IsChecked, Converter={StaticResource VisibilityConverter}, ElementName=OpenLogViewBtn}"/>
             </Grid>
 
         </materialDesign:DrawerHost>
