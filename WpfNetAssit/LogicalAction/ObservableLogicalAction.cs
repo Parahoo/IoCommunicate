@@ -14,6 +14,7 @@ namespace WpfNetAssit.LogicalAction
     [XmlInclude(typeof(ControlAction.DisorderControlActionBuilder))]
     [XmlInclude(typeof(ControlAction.ForControlActionBuilder))]
     [XmlInclude(typeof(BaseAction.SendActionBuilder))]
+    [XmlInclude(typeof(BaseAction.RecvActionBuilder))]
     [XmlInclude(typeof(BaseAction.SleepActionBuilder))]
     abstract public class LogicalActionBuilder
     {

@@ -110,7 +110,7 @@ namespace WpfNetAssit.LogicalAction.BaseAction
 
             var buf = Param.GetData();
             int writesize = buf.Length;
-            var io = dict["io"] as ICommunicateIo;
+            var io = dict["io"] as IoPipe;
             var ret = io.Write(buf, ref writesize);
 
             logfunc(string.Format("send: {0}", ret ? "ok":"faild"), tab);

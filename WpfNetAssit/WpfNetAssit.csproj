@@ -118,12 +118,15 @@
       <DependentUpon>DataEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="Communicate\Send\NormalSend\DataEditorModel.cs" />
+    <Compile Include="DataToStringHelper.cs" />
     <Compile Include="LogicalAction\BaseAction\BaseAction.cs" />
+    <Compile Include="LogicalAction\BaseAction\RecvAction.cs" />
     <Compile Include="LogicalAction\BaseAction\SendAction.cs" />
     <Compile Include="LogicalAction\BaseAction\SleepAction.cs" />
     <Compile Include="LogicalAction\ControlAction\ControlAction.cs" />
     <Compile Include="LogicalAction\ControlAction\DisorderControlAction.cs" />
     <Compile Include="LogicalAction\ControlAction\ForControlAction.cs" />
+    <Compile Include="LogicalAction\IoPipe.cs" />
     <Compile Include="LogicalAction\LogicalAction.cs" />
     <Compile Include="Communicate\Send\LogicalSend\LogicalSendPage.xaml.cs">
       <DependentUpon>LogicalSendPage.xaml</DependentUpon>

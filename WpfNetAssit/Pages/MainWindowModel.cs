@@ -78,7 +78,7 @@ namespace WpfNetAssit.Pages
                     if (!ret)
                     {
                         IsIoOk = false;
-                        Task.Delay(100);
+                        Task.Delay(100).Wait();
                     }
                     else
                     {

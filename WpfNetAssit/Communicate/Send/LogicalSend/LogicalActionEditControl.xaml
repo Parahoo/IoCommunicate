@@ -38,6 +38,13 @@
 
                 </StackPanel>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type baseaction:RecvActionParam}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="接收超时：" VerticalAlignment="Center"></TextBlock>
+                    <TextBox MinWidth="100" VerticalAlignment="Center" Text="{Binding Timeout, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    <TextBlock Text=" ms" VerticalAlignment="Center"></TextBlock>
+                </StackPanel>
+            </DataTemplate>
             <DataTemplate DataType="{x:Type baseaction:SleepActionParam}">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="休眠：" VerticalAlignment="Center"></TextBlock>

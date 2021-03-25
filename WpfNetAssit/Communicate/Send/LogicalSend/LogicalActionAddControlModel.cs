@@ -62,6 +62,7 @@ namespace WpfNetAssit.Communicate.Send.LogicalSend
             AvaiableActionBuilders.Add(new DisorderControlActionBuilder());
             AvaiableActionBuilders.Add(new ForControlActionBuilder());
             AvaiableActionBuilders.Add(new SendActionBuilder());
+            AvaiableActionBuilders.Add(new RecvActionBuilder());
             AvaiableActionBuilders.Add(new SleepActionBuilder());
         }
     }

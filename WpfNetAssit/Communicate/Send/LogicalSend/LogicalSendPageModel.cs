@@ -91,8 +91,6 @@ namespace WpfNetAssit.Communicate.Send.LogicalSend
             {
                 IsRuningFrozen = true;
                 IsOpenLogView = true;
-                cancellationTokensource = new CancellationTokenSource();
-                CancellationToken cancellationToken = cancellationTokensource.Token;
 
                 if (!Directory.Exists("./log/"))
                     Directory.CreateDirectory("./log/");
@@ -102,15 +100,19 @@ namespace WpfNetAssit.Communicate.Send.LogicalSend
                 try
                 {
                     Dictionary<string, object> datacontext = new Dictionary<string, object>();
-                    datacontext.Add("io", Io);
+
+                    ioPipe = new IoPipe() { Io = Io };
+                    datacontext.Add("io", ioPipe);
+
+                    cancellationTokensource = new CancellationTokenSource();
+                    CancellationToken cancellationToken = cancellationTokensource.Token;
                     datacontext.Add("canceltoken", cancellationToken);
-                    datacontext.Add("log", new Action<string,string>((string log, string tab) =>
-                     {
-                         string text = tab + log;
-                         TextMonitorModel.MonitorData(text+"\r\n");
-                         streamWriter.WriteLine(DateTime.Now.ToString("[HH:mm:ss.fff] ")+ text);
-                         streamWriter.Flush();
-                     }));
+
+                    datacontext.Add("log", new Action<string, string>((string log, string tab) =>
+                    {
+                        string text = tab + log;
+                        OutputLog(streamWriter, text);
+                    }));
                     datacontext.Add("tab", "");
 
                     TextMonitorModel.ClearMonitor();
@@ -118,14 +120,14 @@ namespace WpfNetAssit.Communicate.Send.LogicalSend
                     {
                         try
                         {
-                            LogicalActionControlModel.RootAction.Act(datacontext); 
+                            var ok = LogicalActionControlModel.RootAction.Act(datacontext);
+                            OutputLog(streamWriter, ok ? "完成":"出错停止");
                         }
-                        catch (Exception)
+                        catch (Exception e)
                         {
-
+                            OutputLog(streamWriter, e.Message);
                         }
                         IsRuningFrozen = false;
-                        IsOpenLogView = false;
                     }, cancellationToken);
                     await logicSendTask;
                 }
@@ -133,12 +135,26 @@ namespace WpfNetAssit.Communicate.Send.LogicalSend
                 {
                     streamWriter.Dispose();
                     fs.Dispose();
+                    ioPipe = null;
                 }
             }
             else
             {
                 cancellationTokensource.Cancel();
             }
+        }
+
+        private void OutputLog(StreamWriter streamWriter, string text)
+        {
+            TextMonitorModel.MonitorData(text + "\r\n");
+            streamWriter.WriteLine(DateTime.Now.ToString("[HH:mm:ss.fff] ") + text);
+            streamWriter.Flush();
+        }
+
+        IoPipe ioPipe = null;
+        public void RecvData(byte[] data)
+        {
+            ioPipe?.RecvData(data);
         }
     }
 }

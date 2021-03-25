@@ -29,6 +29,7 @@ namespace WpfNetAssit.Communicate
 
         public CommunicatePageModel()
         {
+            ProcessRecv += SendPageModel.LogicalSendPageModel.RecvData;
             ProcessRecv += RecivePageModel.ReciveShowPageModel.RecvData;
         }       
 
