@@ -57,6 +57,14 @@
                         <ToggleButton Style="{DynamicResource MaterialDesignSwitchToggleButton}" Margin="5" VerticalAlignment="Center" IsChecked="{Binding IsPlusN}"></ToggleButton>
                         <TextBlock Text="附加\n" Style="{DynamicResource MaterialDesignBody1TextBlock}" Margin="5" VerticalAlignment="Center" ></TextBlock>
                     </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="首部附加Hex:" Style="{DynamicResource MaterialDesignBody1TextBlock}" Margin="5" VerticalAlignment="Center" ></TextBlock>
+                        <TextBox Style="{DynamicResource MaterialDesignTextBox}" VerticalAlignment="Center" MinWidth="100" Text="{Binding HeadAppendHex, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="尾部附加Hex:" Style="{DynamicResource MaterialDesignBody1TextBlock}" Margin="5" VerticalAlignment="Center" ></TextBlock>
+                        <TextBox Style="{DynamicResource MaterialDesignTextBox}" VerticalAlignment="Center" MinWidth="100" Text="{Binding TailAppendHex, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    </StackPanel>
 
                 </StackPanel>
             </DataTemplate>

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WpfNetAssit.Communicate;
 using WpfNetAssit.IoConnect;
 
 namespace WpfNetAssit.LogicalAction.BaseAction
@@ -11,7 +12,22 @@ namespace WpfNetAssit.LogicalAction.BaseAction
     [Serializable]
     public class SendActionParam : ObservableObject
     {
-        public string Info => (Data+ (IsPlusR?"\\r":"")+(IsPlusN?"\\n":""));
+        public string Info => ToString();
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            if (HeadAppendHex != "")
+                sb.Append("[" + HeadAppendHex + "]");
+            sb.Append(Data);
+            if (IsPlusR)
+                sb.Append("\\r");
+            if (IsPlusN)
+                sb.Append("\\n");
+            if(TailAppendHex != "")
+                sb.Append("[" + TailAppendHex + "]");
+            return sb.ToString();
+        }
 
         private string data = "";
         public string Data
@@ -34,23 +50,50 @@ namespace WpfNetAssit.LogicalAction.BaseAction
             set { Set("IsPlusN", ref isPlusN, value); RaisePropertyChanged("Info"); }
         }
 
+        private string headAppendHex = "";
+        public string HeadAppendHex
+        {
+            get { return headAppendHex; }
+            set { Set("HeadAppendHex", ref headAppendHex, value); RaisePropertyChanged("Info"); }
+        }
+
+        private string tailAppendHex = "";
+        public string TailAppendHex
+        {
+            get { return tailAppendHex; }
+            set { Set("TailAppendHex", ref tailAppendHex, value); RaisePropertyChanged("Info"); }
+        }
+
+
 
         public SendActionParam() { }
         public SendActionParam(string v) { Data = v; }
-        public SendActionParam(string v, bool br, bool bn) { Data = v; IsPlusR = br; IsPlusN = bn; }
+        public SendActionParam(string v, bool br, bool bn, string head, string tail) { Data = v; IsPlusR = br; IsPlusN = bn; HeadAppendHex = head; TailAppendHex = tail; }
         public SendActionParam Clone()
         {
-            return new SendActionParam(Data, IsPlusR, IsPlusN);
+            return new SendActionParam(Data, IsPlusR, IsPlusN, HeadAppendHex, TailAppendHex);
         }
 
         public byte[] GetData()
         {
+            var headdata = HexStringConvertor.StringToHex(HeadAppendHex);
+            var taildata = HexStringConvertor.StringToHex(TailAppendHex);
             string str = Data;
             if (IsPlusR)
                 str += "\r";
             if (IsPlusN)
                 str += "\n";
-            return Encoding.UTF8.GetBytes(str);
+            var bodydata = Encoding.UTF8.GetBytes(str);
+            if (headdata.Length == 0 && taildata.Length == 0)
+                return bodydata;
+            else
+            {
+                var buf = new byte[headdata.Length + taildata.Length + bodydata.Length];
+                headdata.CopyTo(buf, 0);
+                bodydata.CopyTo(buf, headdata.Length);
+                taildata.CopyTo(buf, headdata.Length + bodydata.Length);
+                return buf;
+            }
         }
     }
 
