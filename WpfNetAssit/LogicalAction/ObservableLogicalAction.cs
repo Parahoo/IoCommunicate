@@ -6,6 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using WpfNetAssit.LogicalAction.BaseAction;
+using WpfNetAssit.LogicalAction.ControlAction;
+using WpfNetAssit.LogicalAction.JudgmentAction;
 
 namespace WpfNetAssit.LogicalAction
 {
@@ -13,9 +16,13 @@ namespace WpfNetAssit.LogicalAction
     [XmlInclude(typeof(ControlAction.ControlActionBuilder))]
     [XmlInclude(typeof(ControlAction.DisorderControlActionBuilder))]
     [XmlInclude(typeof(ControlAction.ForControlActionBuilder))]
+    [XmlInclude(typeof(ControlAction.RetryControlActionBuilder))]
+    [XmlInclude(typeof(ControlAction.PickControlActionBuilder))]
+    [XmlInclude(typeof(ControlAction.OperatorControlActionBuilder))]
     [XmlInclude(typeof(BaseAction.SendActionBuilder))]
     [XmlInclude(typeof(BaseAction.RecvActionBuilder))]
     [XmlInclude(typeof(BaseAction.SleepActionBuilder))]
+    [XmlInclude(typeof(JudgmentAction.CheckStringActionBuilder))]
     abstract public class LogicalActionBuilder
     {
         abstract public object GetParam();
@@ -28,6 +35,25 @@ namespace WpfNetAssit.LogicalAction
         }
 
         abstract public ObservableLogicalAction Build();
+
+        static public ObservableCollection<LogicalActionBuilder> GetAvaiableActionBuilders()
+        {
+            var AvaiableActionBuilders = new ObservableCollection<LogicalActionBuilder>();
+
+            AvaiableActionBuilders.Add(new DisorderControlActionBuilder());
+            AvaiableActionBuilders.Add(new ForControlActionBuilder());
+            AvaiableActionBuilders.Add(new RetryControlActionBuilder());
+            AvaiableActionBuilders.Add(new PickControlActionBuilder());
+            AvaiableActionBuilders.Add(new OperatorControlActionBuilder());
+
+            AvaiableActionBuilders.Add(new SendActionBuilder());
+            AvaiableActionBuilders.Add(new RecvActionBuilder());
+            AvaiableActionBuilders.Add(new SleepActionBuilder());
+
+            AvaiableActionBuilders.Add(new CheckStringActionBuilder());
+
+            return AvaiableActionBuilders;
+        }
     }
 
 

@@ -71,12 +71,17 @@
                                                     <TextBlock Style="{DynamicResource MaterialDesignHeadline6TextBlock}" Text="{Binding Title}" />
                                                     <StackPanel Orientation="Horizontal">
                                                         <TextBlock Style="{DynamicResource MaterialDesignBody2TextBlock}" VerticalAlignment="Center" Text="{Binding Info}" />
+                                                        <Grid>
+                                                        <ProgressBar Style="{DynamicResource MaterialDesignLinearProgressBar}" 
+                                                                     IsIndeterminate="{Binding CommunicatePageModel.SendPageModel.LogicalSendPageModel.IsRuningFrozen}"
+                                                                     Visibility="{Binding  CommunicatePageModel.SendPageModel.LogicalSendPageModel.IsRuningFrozen, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" VerticalAlignment="Bottom"></ProgressBar>
                                                         <ToggleButton Style="{DynamicResource MaterialDesignActionToggleButton}" IsHitTestVisible="False" Background="{x:Null}" VerticalAlignment="Center" IsChecked="{Binding IsIoOk}">
                                                             <materialDesign:ToggleButtonAssist.OnContent>
                                                                 <materialDesign:PackIcon Kind="Link" Foreground="Green"></materialDesign:PackIcon>
                                                             </materialDesign:ToggleButtonAssist.OnContent>
                                                             <materialDesign:PackIcon Kind="ErrorOutline" Foreground="Red"></materialDesign:PackIcon>
-                                                        </ToggleButton>
+                                                        </ToggleButton>                                                            
+                                                        </Grid>
                                                     </StackPanel>
                                                 </StackPanel>
                                                 <Button  Style="{DynamicResource MaterialDesignIconButton}" Command="{Binding DeleteCommunicateCommand}">

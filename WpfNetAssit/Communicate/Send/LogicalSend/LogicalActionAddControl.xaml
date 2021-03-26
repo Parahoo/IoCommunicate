@@ -18,7 +18,15 @@
         <ListBox Margin="10" ItemsSource="{Binding AvaiableActionBuilders}" SelectedItem="{Binding SelectedActionBuilder}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding }"></TextBlock>
+                    <StackPanel Orientation="Horizontal">
+                        <ToggleButton Style="{StaticResource MaterialDesignActionToggleButton}"
+                                      Background="{x:Null}" IsHitTestVisible="False"
+                                      IsChecked="{Binding IsContainer}"
+                                      Content="{materialDesign:PackIcon Kind=Function}"
+                                      materialDesign:ToggleButtonAssist.OnContent="{materialDesign:PackIcon Kind=Contain}" Width="Auto" Height="Auto" />
+
+                        <TextBlock Text="{Binding }" Margin="2,0" VerticalAlignment="Center"></TextBlock>
+                    </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

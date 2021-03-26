@@ -54,7 +54,7 @@ namespace WpfNetAssit.LogicalAction.BaseAction
         }
     }
 
-    public class SendActionBuilder : LogicalActionBuilder
+    public class SendActionBuilder : BaseActionBuilder
     {
         public SendActionParam Param { get; set; }
 

@@ -143,6 +143,14 @@ namespace WpfNetAssit.Communicate.Send.LogicalSend
                 cancellationTokensource.Cancel();
             }
         }
+        public async void Stop()
+        {
+            if(IsRuningFrozen)
+            {
+                cancellationTokensource.Cancel();
+                await logicSendTask;
+            }
+        }
 
         private void OutputLog(StreamWriter streamWriter, string text)
         {

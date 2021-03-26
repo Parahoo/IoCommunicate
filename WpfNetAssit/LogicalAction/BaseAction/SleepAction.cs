@@ -28,7 +28,7 @@ namespace WpfNetAssit.LogicalAction.BaseAction
         }
     }
 
-    public class SleepActionBuilder : LogicalActionBuilder
+    public class SleepActionBuilder : BaseActionBuilder
     {
         public SleepActionParam Param { get; set; }
 

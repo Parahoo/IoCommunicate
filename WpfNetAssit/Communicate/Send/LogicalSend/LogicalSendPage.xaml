@@ -16,7 +16,7 @@
     <Grid>
         <materialDesign:DrawerHost IsRightDrawerOpen="{Binding IsOpenHost, Mode=TwoWay}">
             <materialDesign:DrawerHost.RightDrawerContent>
-                <StackPanel>
+                <StackPanel Orientation="Horizontal">
                     <local:LogicalActionControlSettingPage DataContext="{Binding LogicalActionControlSettingPageModel}"/>
                 </StackPanel>
             </materialDesign:DrawerHost.RightDrawerContent>

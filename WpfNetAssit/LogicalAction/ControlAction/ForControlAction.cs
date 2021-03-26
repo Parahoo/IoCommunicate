@@ -29,7 +29,7 @@ namespace WpfNetAssit.LogicalAction.ControlAction
     }
 
         [Serializable]
-    public class ForControlActionBuilder : LogicalActionBuilder
+    public class ForControlActionBuilder : ControlActionBuilder
     {
         public  ForControlActionParam Param { get; set; }
 

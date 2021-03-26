@@ -21,7 +21,7 @@ namespace WpfNetAssit.Communicate.Send.LogicalSend
             set { Set("AvaiableTemplates", ref avaiableTemplates, value); }
         }
 
-        string path = "./LogicalActions";
+        string path = "./LogicalActions/";
 
         public bool IsCoverSave { get; set; } = false;
         private string newFileName = "";
@@ -57,6 +57,7 @@ namespace WpfNetAssit.Communicate.Send.LogicalSend
         public ICommand SaveTemplateCommand { get; }
         public ICommand CoverSaveTemplateCommand { get; }
 
+        public ICommand RefreshTemplateListCommand { get; }
         public ICommand ImportTemplateFileCommand { get; }
         public ICommand DeleteTemplateFileCommand { get; }
 
@@ -68,13 +69,21 @@ namespace WpfNetAssit.Communicate.Send.LogicalSend
             ApplyTemplateCommand = new RelayCommand(ApplyTemplate);
             SaveTemplateCommand = new RelayCommand(SaveTemplate);
             CoverSaveTemplateCommand = new RelayCommand(CoverSaveTemplate);
+
+            RefreshTemplateListCommand = new RelayCommand(RefreshTemplateList);
             ImportTemplateFileCommand = new RelayCommand(ImportTemplateFile);
             DeleteTemplateFileCommand = new RelayCommand(DeleteTemplateFile);
         }
 
-        private void ImportTemplateFile()
+        private void RefreshTemplateList()
         {
             LoadAvaiableActionTemplate(); IsCoverSave = CheckCoverSave(newFileName);
+        }
+
+        private void ImportTemplateFile()
+        {
+            var fullpath = Path.GetDirectoryName(path);
+            System.Diagnostics.Process.Start(fullpath);
         }
 
         private void DeleteTemplateFile()
@@ -91,7 +100,7 @@ namespace WpfNetAssit.Communicate.Send.LogicalSend
         {
             if (filename == null)
                 return "";
-            return path + "/" + (filename.EndsWith(".xaml") ? filename : (filename + ".xaml"));
+            return path + (filename.EndsWith(".xaml") ? filename : (filename + ".xaml"));
         }
 
         private Action<ControlAction> Apply;

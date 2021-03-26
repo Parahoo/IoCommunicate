@@ -13,6 +13,10 @@ namespace WpfNetAssit.LogicalAction.ControlAction
     public class ControlActionBuilder : LogicalActionBuilder
     {
 
+        [System.Xml.Serialization.XmlIgnore]
+        public bool IsContainer { get; set; } = true;
+
+
         public override ObservableLogicalAction Build()
         {
             return new ControlAction(this);
@@ -43,9 +47,9 @@ namespace WpfNetAssit.LogicalAction.ControlAction
 
             foreach (var action in actions)
             {
+                cancel.ThrowIfCancellationRequested();
                 if (!action.Act(datacontext))
                     return false;
-                cancel.ThrowIfCancellationRequested();
             }
             return true;
         }

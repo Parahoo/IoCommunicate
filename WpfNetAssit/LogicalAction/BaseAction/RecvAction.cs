@@ -29,7 +29,7 @@ namespace WpfNetAssit.LogicalAction.BaseAction
         }
     }
 
-    public class RecvActionBuilder : LogicalActionBuilder
+    public class RecvActionBuilder : BaseActionBuilder
     {
         public RecvActionParam Param { get; set; }
 

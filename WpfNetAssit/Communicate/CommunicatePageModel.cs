@@ -40,6 +40,7 @@ namespace WpfNetAssit.Communicate
 
         public void StopCommunicate()
         {
+            SendPageModel.LogicalSendPageModel.Stop();
             SendPageModel.SetIo(null);
         }
 

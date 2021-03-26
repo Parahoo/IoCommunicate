@@ -26,7 +26,7 @@ namespace WpfNetAssit.LogicalAction.ControlAction
         }
     }
 
-    public class DisorderControlActionBuilder : LogicalActionBuilder
+    public class DisorderControlActionBuilder : ControlActionBuilder
     {
         public DisorderControlActionParam Param { get; set; }
 
@@ -76,12 +76,12 @@ namespace WpfNetAssit.LogicalAction.ControlAction
             return ""; 
         }
 
+        Random random = new Random();
         private ObservableCollection<ObservableLogicalAction> DisorderActions(ObservableCollection<ObservableLogicalAction> org)
         {
             var collections = new List<ObservableLogicalAction>(org);
 
             var dst = new ObservableCollection<ObservableLogicalAction>();
-            Random random = new Random();
             for (int i = 0; i < org.Count; i++)
             {
                 int pick = random.Next(collections.Count);

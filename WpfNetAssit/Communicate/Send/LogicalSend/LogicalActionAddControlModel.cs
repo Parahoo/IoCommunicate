@@ -10,6 +10,7 @@ using System.Windows.Input;
 using WpfNetAssit.LogicalAction;
 using WpfNetAssit.LogicalAction.BaseAction;
 using WpfNetAssit.LogicalAction.ControlAction;
+using WpfNetAssit.LogicalAction.JudgmentAction;
 
 namespace WpfNetAssit.Communicate.Send.LogicalSend
 {
@@ -59,11 +60,7 @@ namespace WpfNetAssit.Communicate.Send.LogicalSend
 
         public void InitAvaiableActionBuilders()
         {
-            AvaiableActionBuilders.Add(new DisorderControlActionBuilder());
-            AvaiableActionBuilders.Add(new ForControlActionBuilder());
-            AvaiableActionBuilders.Add(new SendActionBuilder());
-            AvaiableActionBuilders.Add(new RecvActionBuilder());
-            AvaiableActionBuilders.Add(new SleepActionBuilder());
+            AvaiableActionBuilders = LogicalActionBuilder.GetAvaiableActionBuilders();
         }
     }
 }
