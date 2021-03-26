@@ -13,16 +13,21 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WpfNetAssit.Communicate.Send
+namespace WpfNetAssit.Pages
 {
     /// <summary>
-    /// LogicalSendPage.xaml 的交互逻辑
+    /// TextMonitor.xaml 的交互逻辑
     /// </summary>
-    public partial class LogicalSendPage : UserControl
+    public partial class TextMonitor : UserControl
     {
-        public LogicalSendPage()
+        public TextMonitor()
         {
             InitializeComponent();
+        }
+
+        private void MonitorTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            MonitorTextBox.ScrollToEnd();
         }
     }
 }

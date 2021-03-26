@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace WpfNetAssit.Communicate.Send
+namespace WpfNetAssit.Communicate.Send.NormalSend
 {
     public class SendDataEventArgs : RoutedEventArgs
     {

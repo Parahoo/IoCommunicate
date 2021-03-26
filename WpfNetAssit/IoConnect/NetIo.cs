@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace WpfNetAssit.IoConnect
 {
-    public class NetIoParam
+    public class NetIoParam : ObservableObject, ICloneable
     {
 
         public bool BRefLocalIp { get; set; } = false;
@@ -18,11 +19,35 @@ namespace WpfNetAssit.IoConnect
         public int LocalPort { get; set; } = 0;
         public string RemoteIp { get; set; } = "192.168.1.100";
         public int RemotePort { get; set; } = 60000;
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
+
+        override public string ToString()
+        {
+            return "["+ LocalIp + ":" + LocalPort +"] <-> [" + RemoteIp + ":" + RemotePort + "]";
+        }
+
+        public string RemoteEndpointToString()
+        {
+            return RemoteIp + ":" + RemotePort;
+        }
     }
 
-    public class UdpIo : CommunicateIo
+    public class UdpIo : ICommunicateIo
     {
         public NetIoParam Param { get; set; }= new NetIoParam();
+
+        public string NickName { get; set; } = "Udp";
+
+        public string LinkInfo { get; set; } = "";
+
+        public string FullInfo => NickName + "\r\n"+ LinkInfo;
+
+        public string ErrorInfo { get; set; } = "";
+        public bool IsLinkOk { get; set; } = false;
 
         private Socket socket;
 
@@ -40,10 +65,15 @@ namespace WpfNetAssit.IoConnect
                 else
                     endPoint = new IPEndPoint(IPAddress.Any, port);
                 socket.Bind(endPoint);
+                LinkInfo = socket.LocalEndPoint.ToString() + "->" + Param.RemoteEndpointToString();
+                ErrorInfo = "";
+                IsLinkOk = true;
                 return true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                ErrorInfo = e.Message;
+                IsLinkOk = false;
                 return false;
             }
         }
@@ -51,6 +81,7 @@ namespace WpfNetAssit.IoConnect
         private bool CloseSocket()
         {
             socket.Close();
+            IsLinkOk = false;
             return true;
         }
 
@@ -73,6 +104,7 @@ namespace WpfNetAssit.IoConnect
             }
             catch (Exception)
             {
+                IsLinkOk = false;
                 return false;
             }
             return true;
@@ -99,6 +131,7 @@ namespace WpfNetAssit.IoConnect
                 }
                 catch (Exception)
                 {
+                    IsLinkOk = false;
                     return false;
                 }
 
@@ -107,9 +140,18 @@ namespace WpfNetAssit.IoConnect
         }
     }
 
-    public class TcpIo : CommunicateIo
+    public class TcpIo : ICommunicateIo
     {
         public NetIoParam Param { get; set; } = new NetIoParam();
+        public string NickName { get; set; } = "Tcp";
+
+        public string LinkInfo { get; set; } = "";
+
+        public string FullInfo => NickName + "\r\n" + LinkInfo;
+
+        public string ErrorInfo { get; set; } = "";
+
+        public bool IsLinkOk { get; set; } = false;
 
         private Socket socket;
 
@@ -133,6 +175,7 @@ namespace WpfNetAssit.IoConnect
                 endPoint = new IPEndPoint(IPAddress.Any, port);
             return ConnectTimeOut(endPoint);
         }
+
         private bool IsConnectSuccessful = false;
         private ManualResetEvent TimeOutObject = new ManualResetEvent(false);
         private bool ConnectTimeOut(IPEndPoint endPoint)
@@ -142,13 +185,23 @@ namespace WpfNetAssit.IoConnect
             if (TimeOutObject.WaitOne(2000, false))
             {
                 if (IsConnectSuccessful)
+                {
+                    ErrorInfo = "";
+                    IsLinkOk = true;
+                    LinkInfo = socket.LocalEndPoint.ToString() + "->" + endPoint.ToString();
                     return true;
+                }
                 else
+                {
+                    IsLinkOk = false;
                     return false;
+                }
             }
             else
             {
+                ErrorInfo = "无法连接TcpServer";
                 socket.Close();
+                IsLinkOk = false;
                 return false;
             }
 
@@ -167,8 +220,9 @@ namespace WpfNetAssit.IoConnect
                     IsConnectSuccessful = true;
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                ErrorInfo = e.Message;
                 IsConnectSuccessful = false;
             }
             finally
@@ -181,6 +235,7 @@ namespace WpfNetAssit.IoConnect
         private bool CloseSocket()
         {
             socket.Close();
+            IsLinkOk = false;
             return true;
         }
 
@@ -202,6 +257,7 @@ namespace WpfNetAssit.IoConnect
             }
             catch (Exception)
             {
+                IsLinkOk = false;
                 return false;
             }
             return true;
@@ -209,9 +265,17 @@ namespace WpfNetAssit.IoConnect
 
         public bool Write(byte[] pData, ref int writeSize)
         {
-            writeSize = socket.Send(pData);
-            Console.WriteLine("Send :{0}", pData);
-            return true;
+            try
+            {
+                writeSize = socket.Send(pData);
+                Console.WriteLine("Send :{0}", pData);
+                return true;
+            }
+            catch (Exception)
+            {
+                IsLinkOk = false;
+                return false;
+            }
         }
     }
 }

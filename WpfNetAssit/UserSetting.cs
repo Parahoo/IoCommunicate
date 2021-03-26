@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using WpfNetAssit.Communicate;
+using WpfNetAssit.LogicalAction.ControlAction;
 
 namespace WpfNetAssit
 {
@@ -15,6 +17,10 @@ namespace WpfNetAssit
         /// 端口信息的配置
         /// </summary>
         public IoConnect.IosSetting IosSetting { get; set; } = new IoConnect.IosSetting();
+
+        public CommunicatePageModel CommunicatePageModel { get; set; } = new CommunicatePageModel();
+
+        public ControlActionBuilder RootBuilder { get; set; } = new ControlActionBuilder();
 
         public static UserSetting Default { get; set; } = new UserSetting();
 

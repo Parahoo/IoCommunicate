@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight;
+using System;
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
@@ -7,18 +8,36 @@ using System.Threading.Tasks;
 
 namespace WpfNetAssit.IoConnect
 {
-    public class ComIoParam
+    public class ComIoParam : ObservableObject, ICloneable
     {
         public string Name { get; set; } = "com3";
         public int BaudRate { get; set; } = 9600;
         public Parity Parity { get; set; } = Parity.None;
         public int DataBits { get; set; } = 8;
         public StopBits StopBit { get; set; } = StopBits.One;
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
+
+        public override string ToString()
+        {
+            return Name + "@" + BaudRate.ToString();
+        }
     }
 
-    public class ComIo : CommunicateIo
+    public class ComIo : ICommunicateIo
     {
         public ComIoParam Param { get; set; } = new ComIoParam();
+        public string NickName { get; set; } = "Com";
+
+        public string LinkInfo { get; set; } = "";
+
+        public string FullInfo => NickName+LinkInfo;
+
+        public string ErrorInfo { get; set; } = "";
+        public bool IsLinkOk { get; set; } = false;
 
         public SerialPort port;
 
@@ -29,10 +48,15 @@ namespace WpfNetAssit.IoConnect
                 port = new SerialPort(Param.Name, Param.BaudRate,
                     Param.Parity, Param.DataBits, Param.StopBit);
                 port.Open();
+                LinkInfo = Param.Name;
+                ErrorInfo = "";
+                IsLinkOk = true;
                 return true;
             }
             catch (Exception)
             {
+                ErrorInfo = "无法打开 "+ Param.Name;
+                IsLinkOk = false;
                 return false;
             }
         }
@@ -42,10 +66,12 @@ namespace WpfNetAssit.IoConnect
             try
             {
                 port.Close();
+                IsLinkOk = false;
                 return true;
             }
             catch (Exception)
             {
+                IsLinkOk = false;
                 return false;
             }
         }

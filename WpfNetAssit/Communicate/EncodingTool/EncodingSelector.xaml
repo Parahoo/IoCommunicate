@@ -17,7 +17,7 @@
         </Grid.ColumnDefinitions>
         <Label Content="{Binding Header, ElementName=userControl}" VerticalAlignment="Center" Visibility="{Binding IsHeaderShow, Converter={StaticResource VisibilityConverter}, ElementName=userControl}"/>
 
-        <ComboBox Grid.Column="1" x:Name="EncodingComboBox" SelectedIndex="0" SelectionChanged="EncodingComboBox_SelectionChanged" VerticalAlignment="Center">
+        <ComboBox Grid.Column="1" x:Name="EncodingComboBox" MinWidth="150" SelectedItem="{Binding CurEncoding, ElementName=userControl}" SelectionChanged="EncodingComboBox_SelectionChanged" VerticalAlignment="Center">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding EncodingName}"/>

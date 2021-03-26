@@ -24,17 +24,5 @@ namespace WpfNetAssit.Communicate
         {
             InitializeComponent();
         }
-
-        public void StartCommunicate(IoConnect.CommunicateIo io)
-        {
-            RecivePage.StartRecive(io);
-            SendPage.Io = io;
-        }
-
-        public void StopCommunicate()
-        {
-            RecivePage.StopRecive();
-            SendPage.Io = null;
-        }
     }
 }
