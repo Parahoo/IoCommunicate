@@ -25,12 +25,14 @@
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Content="串口号:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         <Label Grid.Row="1" Content="波特率:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         <Label Grid.Row="2" Content="奇偶校验:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         <Label Grid.Row="3" Content="数据位:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         <Label Grid.Row="4" Content="停止位:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <Label Grid.Row="5" Content="流控:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
 
         <ComboBox x:Name="ComIdComboBox" Margin="2" Grid.Row="0" Grid.Column="1" IsEditable="True" Text="{Binding Name}" DropDownOpened="ComboBox_DropDownOpened"/>
         <ComboBox Margin="2" Grid.Row="1" Grid.Column="1" IsEditable="True" Text="{Binding BaudRate, TargetNullValue=9600}">
@@ -53,6 +55,12 @@
             <ComboBoxItem Content="1"/>
             <ComboBoxItem Content="2"/>
             <ComboBoxItem Content="1.5"/>
+        </ComboBox>
+        <ComboBox Margin="2" Grid.Row="5" Grid.Column="1" SelectedIndex="{Binding HandShake, Converter={StaticResource EnumIntConverter}}">
+            <ComboBoxItem Content="None"/>
+            <ComboBoxItem Content="软件(XOnXOff)"/>
+            <ComboBoxItem Content="硬件(RTS)"/>
+            <ComboBoxItem Content="硬件+软件"/>
         </ComboBox>
     </Grid>
 </UserControl>

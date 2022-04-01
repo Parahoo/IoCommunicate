@@ -84,6 +84,8 @@ namespace WpfNetAssit.Pages
                     {
                         if (IsIoOk == false)
                             IsIoOk = true;
+                        if (Info != io.LinkInfo)
+                            Info = io.LinkInfo;
                     }
 
                     if (ret && size > 0)

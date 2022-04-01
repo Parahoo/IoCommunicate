@@ -50,6 +50,8 @@ namespace WpfNetAssit.IoConnect
         public bool IsLinkOk { get; set; } = false;
 
         private Socket socket;
+        private string lastRemoteIp = "0.0.0.0";
+        private int lastRemoteport = 0;
 
         private bool OpenSocket()
         {
@@ -101,6 +103,17 @@ namespace WpfNetAssit.IoConnect
             {
                 EndPoint point = new IPEndPoint(IPAddress.Parse(Param.RemoteIp), Param.RemotePort);
                 readSize = socket.ReceiveFrom(pBuf, ref point);
+
+                if(Param.RemotePort == 0 || Param.RemoteIp == "0.0.0.0")
+                {
+                    if (Param.RemoteIp == "0.0.0.0")
+                        lastRemoteIp = (point as IPEndPoint).Address.ToString();
+                    if (Param.RemotePort == 0)
+                        lastRemoteport = (point as IPEndPoint).Port;
+                    var info = socket.LocalEndPoint.ToString() + "->" + point.ToString();
+                    if (info != LinkInfo)
+                        LinkInfo = info;
+                }
             }
             catch (Exception)
             {
@@ -122,7 +135,9 @@ namespace WpfNetAssit.IoConnect
 
                 try
                 {
-                    EndPoint point = new IPEndPoint(IPAddress.Parse(Param.RemoteIp), Param.RemotePort);
+                    string ip = (Param.RemoteIp == "0.0.0.0") ? lastRemoteIp : Param.RemoteIp;
+                    int port = (Param.RemotePort == 0) ? lastRemoteport : Param.RemotePort;
+                    EndPoint point = new IPEndPoint(IPAddress.Parse(ip), port);
                     int sendSize = socket.SendTo(pData, Start, NeedSendSize, SocketFlags.None, point);
                     if (sendSize != NeedSendSize)
                         return false;

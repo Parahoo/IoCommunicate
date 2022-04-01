@@ -16,6 +16,8 @@ namespace WpfNetAssit.IoConnect
         public int DataBits { get; set; } = 8;
         public StopBits StopBit { get; set; } = StopBits.One;
 
+        public Handshake HandShake { get; set; } = 0;
+
         public object Clone()
         {
             return this.MemberwiseClone();
@@ -47,6 +49,8 @@ namespace WpfNetAssit.IoConnect
             {
                 port = new SerialPort(Param.Name, Param.BaudRate,
                     Param.Parity, Param.DataBits, Param.StopBit);
+                port.Handshake = (Param.HandShake);
+                port.ReadTimeout = 50;
                 port.Open();
                 LinkInfo = Param.Name;
                 ErrorInfo = "";
@@ -80,7 +84,19 @@ namespace WpfNetAssit.IoConnect
         {
             try
             {
-                readSize = port.Read(pBuf, 0, 0x100);
+                readSize = 0;
+
+                int size = port.BytesToRead;
+                while(readSize < 0x100)
+                {
+                    int cursize = port.Read(pBuf, readSize, 0x100);
+                    readSize += cursize;
+
+                }
+                return true;
+            }
+            catch(TimeoutException )
+            {
                 return true;
             }
             catch (Exception)
