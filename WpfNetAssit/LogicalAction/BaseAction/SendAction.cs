@@ -54,14 +54,14 @@ namespace WpfNetAssit.LogicalAction.BaseAction
         public string HeadAppendHex
         {
             get { return headAppendHex; }
-            set { Set("HeadAppendHex", ref headAppendHex, value); RaisePropertyChanged("Info"); }
+            set { Set("HeadAppendHex", ref headAppendHex, HexStringConvertor.HexInput(value)); RaisePropertyChanged("Info"); }
         }
 
         private string tailAppendHex = "";
         public string TailAppendHex
         {
             get { return tailAppendHex; }
-            set { Set("TailAppendHex", ref tailAppendHex, value); RaisePropertyChanged("Info"); }
+            set { Set("TailAppendHex", ref tailAppendHex, HexStringConvertor.HexInput(value)); RaisePropertyChanged("Info"); }
         }
 
 

@@ -53,25 +53,29 @@
                         <behaviors:TemplateBindingBehavior TargetTemplatePropertyPath="(WindowChrome.WindowChrome).(WindowChrome.CaptionHeight)" SourceProperty="ActualHeight"/>
                     </i:Interaction.Behaviors>
                     <Grid>
-                        <StackPanel Orientation="Horizontal">
-                            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,0" Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" Style="{DynamicResource MaterialDesignIconButton}" Command="{Binding ShowAddCommand}">
-                                <materialDesign:PackIcon Kind="add"/>
-                            </Button>
-                            <ItemsControl x:Name="HeaderTab" ItemsSource="{Binding CommunicateIos}"  Margin="2">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <StackPanel Orientation="Horizontal"></StackPanel>
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <RadioButton Style="{DynamicResource MaterialDesignTabRadioButton}" IsChecked="{Binding IsSelected}" GroupName="Ios" Height="Auto">
-                                            <StackPanel Orientation="Horizontal">
-                                                <StackPanel>
-                                                    <TextBlock Style="{DynamicResource MaterialDesignHeadline6TextBlock}" Text="{Binding Title}" />
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <TextBlock Style="{DynamicResource MaterialDesignBody2TextBlock}" VerticalAlignment="Center" Text="{Binding Info}" />
-                                                        <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Button HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2" Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" Style="{DynamicResource MaterialDesignIconButton}" Command="{Binding ShowAddCommand}">
+                            <materialDesign:PackIcon Kind="add"/>
+                        </Button>
+                        <ItemsControl Grid.Column="1" x:Name="HeaderTab" ItemsSource="{Binding CommunicateIos}"  Margin="2">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel></WrapPanel>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <RadioButton Style="{DynamicResource MaterialDesignTabRadioButton}" IsChecked="{Binding IsSelected}" GroupName="Ios" Height="Auto">
+                                        <StackPanel Orientation="Horizontal">
+                                            <StackPanel>
+                                                <TextBlock Style="{DynamicResource MaterialDesignHeadline6TextBlock}" Text="{Binding Title}" />
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Style="{DynamicResource MaterialDesignBody2TextBlock}" VerticalAlignment="Center" Text="{Binding Info}" />
+                                                    <Grid>
                                                         <ProgressBar Style="{DynamicResource MaterialDesignLinearProgressBar}" 
                                                                      IsIndeterminate="{Binding CommunicatePageModel.SendPageModel.LogicalSendPageModel.IsRuningFrozen}"
                                                                      Visibility="{Binding  CommunicatePageModel.SendPageModel.LogicalSendPageModel.IsRuningFrozen, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" VerticalAlignment="Bottom"></ProgressBar>
@@ -80,22 +84,38 @@
                                                                 <materialDesign:PackIcon Kind="Link" Foreground="Green"></materialDesign:PackIcon>
                                                             </materialDesign:ToggleButtonAssist.OnContent>
                                                             <materialDesign:PackIcon Kind="ErrorOutline" Foreground="Red"></materialDesign:PackIcon>
-                                                        </ToggleButton>                                                            
-                                                        </Grid>
-                                                    </StackPanel>
+                                                        </ToggleButton>
+                                                    </Grid>
                                                 </StackPanel>
-                                                <Button  Style="{DynamicResource MaterialDesignIconButton}" Command="{Binding DeleteCommunicateCommand}">
-                                                    <materialDesign:PackIcon Kind="close"></materialDesign:PackIcon>
-                                                </Button>
                                             </StackPanel>
-                                        </RadioButton>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
+                                            <Button  Style="{DynamicResource MaterialDesignIconButton}" Command="{Binding DeleteCommunicateCommand}">
+                                                <materialDesign:PackIcon Kind="close"></materialDesign:PackIcon>
+                                            </Button>
+                                        </StackPanel>
+                                    </RadioButton>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <StackPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top" Orientation="Horizontal">
+                            <ToggleButton  Margin="2" Style="{DynamicResource MaterialDesignActionToggleButton}" Background="Transparent" Foreground="{DynamicResource PrimaryHueMidBrush}" Command="{Binding MinimizeCommand}">
+                                <materialDesign:PackIcon Kind="WindowMinimize"/>
+                                <materialDesign:ToggleButtonAssist.OnContent >
+                                    <materialDesign:PackIcon Kind="WindowMinimize"/>
+                                </materialDesign:ToggleButtonAssist.OnContent>
+                            </ToggleButton>
+                            <ToggleButton Margin="2" Style="{DynamicResource MaterialDesignActionToggleButton}" Background="Transparent" Foreground="{DynamicResource PrimaryHueMidBrush}" Command="{Binding MaximizeCommand}">
+                                <materialDesign:PackIcon Kind="WindowMaximize"/>
+                                <materialDesign:ToggleButtonAssist.OnContent >
+                                    <materialDesign:PackIcon Kind="WindowRestore"/>
+                                </materialDesign:ToggleButtonAssist.OnContent>
+                            </ToggleButton>
+                            <ToggleButton  Margin="2" Style="{DynamicResource MaterialDesignActionToggleButton}" Background="Transparent" Foreground="{DynamicResource PrimaryHueMidBrush}" Command="{Binding CloseCommand}">
+                                <materialDesign:PackIcon Kind="WindowClose"/>
+                                <materialDesign:ToggleButtonAssist.OnContent >
+                                    <materialDesign:PackIcon Kind="WindowClose"/>
+                                </materialDesign:ToggleButtonAssist.OnContent>
+                            </ToggleButton>
                         </StackPanel>
-                        <Button HorizontalAlignment="Right" VerticalAlignment="Top" Margin="2" Style="{DynamicResource MaterialDesignIconButton}" Command="{Binding CloseCommand}">
-                            <materialDesign:PackIcon Kind="Close"/>
-                        </Button>
                     </Grid>
                 </materialDesign:ColorZone>
                 <ItemsControl Grid.Row="1" x:Name="FunctionTab"  

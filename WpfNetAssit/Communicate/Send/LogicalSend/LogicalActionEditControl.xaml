@@ -47,7 +47,7 @@
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="发送数据：" Style="{DynamicResource MaterialDesignBody1TextBlock}" VerticalAlignment="Center"></TextBlock>
-                        <TextBox MinWidth="100" VerticalAlignment="Center" Text="{Binding Data, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                        <TextBox MinWidth="100" MaxWidth="300" TextWrapping="Wrap" AcceptsReturn="True" VerticalAlignment="Center" Text="{Binding Data, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <ToggleButton Style="{DynamicResource MaterialDesignSwitchToggleButton}" Margin="5" VerticalAlignment="Center" IsChecked="{Binding IsPlusR}"></ToggleButton>
@@ -59,11 +59,11 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="首部附加Hex:" Style="{DynamicResource MaterialDesignBody1TextBlock}" Margin="5" VerticalAlignment="Center" ></TextBlock>
-                        <TextBox Style="{DynamicResource MaterialDesignTextBox}" VerticalAlignment="Center" MinWidth="100" Text="{Binding HeadAppendHex, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                        <TextBox Style="{DynamicResource MaterialDesignTextBox}" VerticalAlignment="Center" MinWidth="100" MaxWidth="300" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding HeadAppendHex, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="尾部附加Hex:" Style="{DynamicResource MaterialDesignBody1TextBlock}" Margin="5" VerticalAlignment="Center" ></TextBlock>
-                        <TextBox Style="{DynamicResource MaterialDesignTextBox}" VerticalAlignment="Center" MinWidth="100" Text="{Binding TailAppendHex, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                        <TextBox Style="{DynamicResource MaterialDesignTextBox}" VerticalAlignment="Center" MinWidth="100" MaxWidth="300" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding TailAppendHex, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                     </StackPanel>
 
                 </StackPanel>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WpfNetAssit.Communicate
 {
-    class HexStringConvertor
+    public class HexStringConvertor
     {
         /// <summary>
         /// 将数据转为 16进制显示
@@ -116,6 +116,31 @@ namespace WpfNetAssit.Communicate
                 j += 2;
             }
             return bytes;
+        }
+
+        public static bool IsHex(char c)
+        {
+            return (c >= '0' && c <= '9') ||
+                     (c >= 'a' && c <= 'f') ||
+                     (c >= 'A' && c <= 'F');
+        }
+
+        /// <summary>
+        /// 将输入的字符过滤成只包含16进制数的结果
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string HexInput(string str)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (char c in str)
+            {
+                if (IsHex(c) || c == ' ')
+                {
+                    sb.Append(c);
+                }
+            }
+            return sb.ToString();
         }
     }
 }

@@ -137,6 +137,8 @@ namespace WpfNetAssit.Pages
         public ObservableCollection<CommunicateModel> CommunicateIos { get; set; } = new ObservableCollection<CommunicateModel>();
 
 
+        public ICommand MinimizeCommand { get; }
+        public ICommand MaximizeCommand { get; }
         public ICommand CloseCommand { get; }
         public ICommand ShowAddCommand { get; }
 
@@ -147,8 +149,24 @@ namespace WpfNetAssit.Pages
             UserSetting.Default = UserSetting.Load();
             IoSelectPageViewModel.IosSetting = UserSetting.Default.IosSetting;
             IoSelectPageViewModel.StartIoCommand = new RelayCommand<ICommunicateIo>(AddNewCommunicate);
+            MinimizeCommand = new RelayCommand(Minimize);
+            MaximizeCommand = new RelayCommand(Maximize);
             CloseCommand = new RelayCommand(Close1);
             ShowAddCommand = new RelayCommand(ShowAddAsync);
+
+        }
+
+        private void Minimize()
+        {
+            App.Current.MainWindow.WindowState = WindowState.Minimized;
+        }
+
+        private void Maximize()
+        {
+            if(App.Current.MainWindow.WindowState == WindowState.Normal)
+                App.Current.MainWindow.WindowState = WindowState.Maximized;
+            else
+                App.Current.MainWindow.WindowState = WindowState.Normal;
 
         }
 
