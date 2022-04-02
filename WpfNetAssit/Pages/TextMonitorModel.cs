@@ -17,6 +17,30 @@ namespace WpfNetAssit.Pages
             set { Set("DisplayString", ref displayString, value); }
         }
 
+        private int displayLastLine = 0;
+        public int DisplayLastLine
+        {
+            get { return displayLastLine; }
+            set 
+            {
+                int v = value;
+                if (v < 0)
+                    v = 0;
+                else if (v > displayLines)
+                    v = displayLines;
+                Set("DisplayLastLine", ref displayLastLine, v);
+                MakeDisplayString();
+            }
+        }
+
+        private int displayLines = 0;
+        public int DisplayLines
+        {
+            get { return displayLines; }
+            set { Set("DisplayLines", ref displayLines, value); }
+        }
+
+
         /// <summary>
         /// 一行显示的最大字符数
         /// </summary>
@@ -27,7 +51,9 @@ namespace WpfNetAssit.Pages
         /// </summary>
         public int MaxLinesDisplay { get; set; } = 30;
 
+        //已经完成的行数据
         private List<string> stringlines = new List<string>();
+        //正在添加的行数据
         private string curaddingline = "";
 
         /// <summary>
@@ -41,8 +67,15 @@ namespace WpfNetAssit.Pages
 
             if (stringlines.Count > 5000)
                 stringlines.RemoveRange(0, 100);
+            CalcLines();
 
             MakeDisplayString();
+        }
+
+        private void CalcLines()
+        {
+            DisplayLines = stringlines.Count + 1;
+            DisplayLastLine = DisplayLines;
         }
 
         public void ClearMonitor()
@@ -50,24 +83,30 @@ namespace WpfNetAssit.Pages
             DisplayString = "";
             stringlines.Clear();
             curaddingline = "";
+            CalcLines();
         }
 
         private void MakeDisplayString()
         {
             int lines = MaxLinesDisplay;
-            if (curaddingline != "")
-                lines--;
-            lines = stringlines.Count > lines ? lines:stringlines.Count;
+            int listcount = DisplayLastLine - 1;
+            lines = listcount > lines ? lines : listcount;
+            if (lines < 0)
+                lines = 0;
 
             string[] array = new string[lines];
-            stringlines.CopyTo(stringlines.Count - lines, array, 0, lines);
+            int start = listcount - lines;
+            if (start < 0)
+                start = 0;
+            stringlines.CopyTo(start, array, 0, lines);
             StringBuilder sb = new StringBuilder();
             foreach (var item in array)
             {
                 sb.Append(item);
                 sb.Append("\r\n");
             }
-            sb.Append(curaddingline);
+            if(DisplayLines == DisplayLastLine)
+                sb.Append(curaddingline);
             DisplayString = sb.ToString();
         }
 

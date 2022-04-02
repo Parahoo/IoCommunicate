@@ -10,9 +10,14 @@
         <local:TextMonitorModel></local:TextMonitorModel>
     </UserControl.DataContext>-->
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
         <TextBox x:Name="MonitorTextBox" IsReadOnly="True" TextWrapping="NoWrap" 
                  VerticalScrollBarVisibility="Hidden" 
                  Style="{DynamicResource MaterialDesignOutlinedTextBox}" 
-                 Text="{Binding DisplayString}" VerticalContentAlignment="Bottom" TextChanged="MonitorTextBox_TextChanged"/>
+                 Text="{Binding DisplayString}" VerticalContentAlignment="Bottom" TextChanged="MonitorTextBox_TextChanged" PreviewMouseWheel="MonitorTextBox_PreviewMouseWheel"/>
+        <ScrollBar x:Name="scrollbar" Grid.Column="1" Value="{Binding DisplayLastLine}" Maximum="{Binding DisplayLines}"/>
     </Grid>
 </UserControl>

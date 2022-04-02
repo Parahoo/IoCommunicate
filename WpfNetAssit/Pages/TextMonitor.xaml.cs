@@ -29,5 +29,14 @@ namespace WpfNetAssit.Pages
         {
             MonitorTextBox.ScrollToEnd();
         }
+
+        private void MonitorTextBox_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (e.Delta > 0)
+                scrollbar.Value -= 1;
+            else
+                scrollbar.Value += 1;
+            e.Handled = true;
+        }
     }
 }
