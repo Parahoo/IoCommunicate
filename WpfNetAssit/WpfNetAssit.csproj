@@ -28,7 +28,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationRevision>4</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -144,6 +144,9 @@
     </Compile>
     <Compile Include="Communicate\Send\NormalSend\DataEditorModel.cs" />
     <Compile Include="DataToStringHelper.cs" />
+    <Compile Include="IoConnect\TcpServerIoSettingPage.xaml.cs">
+      <DependentUpon>TcpServerIoSettingPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="LogicalAction\BaseAction\BaseAction.cs" />
     <Compile Include="LogicalAction\BaseAction\RecvAction.cs" />
     <Compile Include="LogicalAction\BaseAction\SendAction.cs" />
@@ -234,6 +237,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="IoConnect\NetIoSettingPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="IoConnect\TcpServerIoSettingPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

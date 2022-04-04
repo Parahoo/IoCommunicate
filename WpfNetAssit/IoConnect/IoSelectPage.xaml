@@ -30,7 +30,7 @@
                 <Grid Margin="20">
                     <local:ComIoSettingPage x:Name="comIoSettingPage" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding IsChecked, Converter={StaticResource VisibilityConverter}, ElementName=radioButton}" DataContext="{Binding IosSetting.ComIoParam}"/>
                     <local:NetIoSettingPage x:Name="UdpIoSettingPage" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding IsChecked, Converter={StaticResource VisibilityConverter}, ElementName=radioButton1}" DataContext="{Binding IosSetting.UdpIoParam}"/>
-                    <local:NetIoSettingPage x:Name="TcpServerSettingPage" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding IsChecked, Converter={StaticResource VisibilityConverter}, ElementName=radioButton2}" DataContext="{Binding IosSetting.TcpServerIoParam}"/>
+                    <local:TcpServerIoSettingPage x:Name="TcpServerSettingPage" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding IsChecked, Converter={StaticResource VisibilityConverter}, ElementName=radioButton2}" DataContext="{Binding IosSetting.TcpServerIoParam}"/>
                     <local:NetIoSettingPage x:Name="TcpClientSettingPage" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding IsChecked, Converter={StaticResource VisibilityConverter}, ElementName=radioButton3}" DataContext="{Binding IosSetting.TcpClientIoParam}"/>
                 </Grid>
             </materialDesign:Card>

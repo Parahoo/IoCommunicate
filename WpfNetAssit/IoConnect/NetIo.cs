@@ -158,7 +158,7 @@ namespace WpfNetAssit.IoConnect
     public class TcpIo : ICommunicateIo
     {
         public NetIoParam Param { get; set; } = new NetIoParam();
-        public string NickName { get; set; } = "Tcp";
+        public string NickName { get; set; } = "TcpClient";
 
         public string LinkInfo { get; set; } = "";
 
@@ -181,6 +181,16 @@ namespace WpfNetAssit.IoConnect
              */
             //使用IPv4地址，流式Socket方式，tcp协议传递数据
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+            if (BindLocalParam() == false)
+                return false;
+
+            IPEndPoint endPoint = CalcRemoteEndpoint();
+            return ConnectTimeOut(endPoint);
+        }
+
+        private IPEndPoint CalcRemoteEndpoint()
+        {
             int port = 0;
             port = Param.RemotePort;
             IPEndPoint endPoint;
@@ -188,7 +198,31 @@ namespace WpfNetAssit.IoConnect
                 endPoint = new IPEndPoint(IPAddress.Parse(Param.RemoteIp), port);
             else
                 endPoint = new IPEndPoint(IPAddress.Any, port);
-            return ConnectTimeOut(endPoint);
+            return endPoint;
+        }
+
+        private bool BindLocalParam()
+        {
+            int port = 0;
+            if (Param.BRefLocalPort)
+                port = Param.LocalPort;
+            try
+            {
+                IPEndPoint endPoint;
+                if (Param.BRefLocalIp)
+                    endPoint = new IPEndPoint(IPAddress.Parse(Param.LocalIp), port);
+                else
+                    endPoint = new IPEndPoint(IPAddress.Any, port);
+                socket.Bind(endPoint);
+                return true;
+            }
+            catch (Exception e)
+            {
+                ErrorInfo = e.Message;
+                IsLinkOk = false;
+                socket.Close();
+                return false;
+            }
         }
 
         private bool IsConnectSuccessful = false;
@@ -291,6 +325,203 @@ namespace WpfNetAssit.IoConnect
                 IsLinkOk = false;
                 return false;
             }
+        }
+    }
+
+
+    public class TcpServerIo : ICommunicateIo
+    {
+        public NetIoParam Param { get; set; } = new NetIoParam();
+        public string NickName { get; set; } = "TcpServer";
+
+        public string LinkInfo { get; set; } = "";
+
+        public string FullInfo => NickName + "\r\n" + LinkInfo;
+
+        public string ErrorInfo { get; set; } = "";
+
+        public bool IsLinkOk { get; set; } = false;
+
+        private Socket socket;
+
+
+        private bool OpenSocket()
+        {
+            socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            if (BindLocalParam() == false)
+                return false;
+            socket.Listen(1);
+            IsLinkOk = true;
+            return true;
+        }
+
+        private bool BindLocalParam()
+        {
+            int port = 0;
+            if (Param.BRefLocalPort)
+            {
+                port = Param.LocalPort;
+            }
+            else
+            {
+                ErrorInfo = "需要绑定端口";
+                IsLinkOk = false;
+                return false;
+            }
+
+            try
+            {
+                IPEndPoint endPoint;
+                if (Param.BRefLocalIp)
+                    endPoint = new IPEndPoint(IPAddress.Parse(Param.LocalIp), port);
+                else
+                    endPoint = new IPEndPoint(IPAddress.Any, port);
+                socket.Bind(endPoint);
+                LinkInfo = socket.LocalEndPoint.ToString() + "<-> *";
+                return true;
+            }
+            catch (Exception e)
+            {
+                ErrorInfo = e.Message;
+                IsLinkOk = false;
+                socket.Close();
+                return false;
+            }
+        }
+
+        private bool IsConnectSuccessful = false;
+        private ManualResetEvent TimeOutObject = new ManualResetEvent(false);
+        private Socket remote = null;
+        private bool WaitConnection()
+        {
+            TimeOutObject.Reset();
+            socket.BeginAccept(new AsyncCallback(callBackConnect), socket);
+            if (TimeOutObject.WaitOne(200, false))
+            {
+                if (IsConnectSuccessful)
+                {
+                    ErrorInfo = "";
+                    IsLinkOk = true;
+                    LinkInfo = socket.LocalEndPoint.ToString() + "<->" + remote.RemoteEndPoint.ToString();
+                    return true;
+                }
+                else
+                {
+                    IsLinkOk = false;
+                    return false;
+                }
+            }
+            else
+            {
+                IsLinkOk = false;
+                return false;
+            }
+
+        }
+
+        private void callBackConnect(IAsyncResult ar)
+        {
+            try
+            {
+                if (ar.IsCompleted)
+                {
+                    IsConnectSuccessful = false;
+                    Socket tcpServer = (Socket)ar.AsyncState;
+
+                    if (tcpServer != null)
+                    {
+                        remote = tcpServer.EndAccept(ar);
+                        IsConnectSuccessful = true;
+                    }
+                }
+                else
+                {
+                    IsConnectSuccessful = false;
+                }
+            }
+            catch (Exception e)
+            {
+                ErrorInfo = e.Message;
+                IsConnectSuccessful = false;
+            }
+            finally
+            {
+                TimeOutObject.Set();
+            }
+
+        }
+
+        private bool CloseSocket()
+        {
+            socket.Close();
+            IsLinkOk = false;
+            socket = null;
+            return true;
+        }
+
+        public bool Close()
+        {
+            CloseRemote();
+            return CloseSocket();
+        }
+
+        public bool Open()
+        {
+            return OpenSocket();
+        }
+
+        public bool Read(byte[] pBuf, ref int readSize)
+        {
+            if (IsConnectSuccessful == false)
+            {
+                WaitConnection();
+                readSize = 0;
+                return true;
+            }
+
+            try
+            {
+                readSize = remote.Receive(pBuf);
+            }
+            catch (Exception)
+            {
+                CloseRemote();
+                IsLinkOk = false;
+                return false;
+            }
+            return true;
+        }
+
+        public bool Write(byte[] pData, ref int writeSize)
+        {
+            if (IsConnectSuccessful == false)
+                return false;
+
+            try
+            {
+                writeSize = remote.Send(pData);
+                Console.WriteLine("Send :{0}", pData);
+                return true;
+            }
+            catch (Exception)
+            {
+                CloseRemote();
+                IsLinkOk = false;
+                return false;
+            }
+        }
+
+        private void CloseRemote()
+        {
+            if (remote != null)
+            {
+                remote.Close();
+                remote = null;
+                IsConnectSuccessful = false;
+            }
+
+            if(socket != null)
+                LinkInfo = socket.LocalEndPoint.ToString() + "<-> *";
         }
     }
 }

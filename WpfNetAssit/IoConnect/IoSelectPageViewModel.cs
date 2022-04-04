@@ -48,6 +48,13 @@ namespace WpfNetAssit.IoConnect
                         CurIo = udpIo;
                         break;
                     }
+                case 2:
+                    {
+                        var tcpserverIo = new TcpServerIo();
+                        tcpserverIo.Param = IosSetting.TcpServerIoParam.Clone() as NetIoParam;
+                        CurIo = tcpserverIo;
+                        break;
+                    }
                 case 3:
                     {
                         var tcpclientIo = new TcpIo();
