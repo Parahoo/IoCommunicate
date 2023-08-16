@@ -20,6 +20,7 @@ namespace WpfNetAssit.LogicalAction
     [XmlInclude(typeof(ControlAction.PickControlActionBuilder))]
     [XmlInclude(typeof(ControlAction.OperatorControlActionBuilder))]
     [XmlInclude(typeof(BaseAction.SendActionBuilder))]
+    [XmlInclude(typeof(BaseAction.SendFileActionBuilder))]
     [XmlInclude(typeof(BaseAction.RecvActionBuilder))]
     [XmlInclude(typeof(BaseAction.SleepActionBuilder))]
     [XmlInclude(typeof(JudgmentAction.CheckStringActionBuilder))]
@@ -47,6 +48,7 @@ namespace WpfNetAssit.LogicalAction
             AvaiableActionBuilders.Add(new OperatorControlActionBuilder());
 
             AvaiableActionBuilders.Add(new SendActionBuilder());
+            AvaiableActionBuilders.Add(new SendFileActionBuilder());
             AvaiableActionBuilders.Add(new RecvActionBuilder());
             AvaiableActionBuilders.Add(new SleepActionBuilder());
 
