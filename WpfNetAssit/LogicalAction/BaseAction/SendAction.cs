@@ -17,15 +17,25 @@ namespace WpfNetAssit.LogicalAction.BaseAction
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            if (HeadAppendHex != "")
-                sb.Append("[" + HeadAppendHex + "]");
+            if (HeadAppendHex != "" && HeadAppendRepeat > 0)
+            {
+                if(HeadAppendRepeat > 1)
+                    sb.Append("[" + HeadAppendHex + "  *" + HeadAppendRepeat.ToString() + "]");
+                else
+                    sb.Append("[" + HeadAppendHex + "]");
+            }
             sb.Append(Data);
             if (IsPlusR)
                 sb.Append("\\r");
             if (IsPlusN)
                 sb.Append("\\n");
-            if(TailAppendHex != "")
-                sb.Append("[" + TailAppendHex + "]");
+            if(TailAppendHex != "" && TailAppendRepeat > 0)
+            {
+                if (TailAppendRepeat > 1)
+                    sb.Append("[" + TailAppendHex + "  *" + TailAppendRepeat.ToString() + "]");
+                else
+                    sb.Append("[" + TailAppendHex + "]");
+            }
             return sb.ToString();
         }
 
@@ -57,6 +67,13 @@ namespace WpfNetAssit.LogicalAction.BaseAction
             set { Set("HeadAppendHex", ref headAppendHex, HexStringConvertor.HexInput(value)); RaisePropertyChanged("Info"); }
         }
 
+        private int headAppendRepeat = 1;
+        public int HeadAppendRepeat
+        {
+            get { return headAppendRepeat; }
+            set { Set("HeadAppendRepeat", ref headAppendRepeat, value); RaisePropertyChanged("Info"); }
+        }
+
         private string tailAppendHex = "";
         public string TailAppendHex
         {
@@ -64,14 +81,26 @@ namespace WpfNetAssit.LogicalAction.BaseAction
             set { Set("TailAppendHex", ref tailAppendHex, HexStringConvertor.HexInput(value)); RaisePropertyChanged("Info"); }
         }
 
+        private int tailAppendRepeat = 1;
+        public int TailAppendRepeat
+        {
+            get { return tailAppendRepeat; }
+            set { Set("TailAppendRepeat", ref tailAppendRepeat, value); RaisePropertyChanged("Info"); }
+        }
+
 
 
         public SendActionParam() { }
         public SendActionParam(string v) { Data = v; }
-        public SendActionParam(string v, bool br, bool bn, string head, string tail) { Data = v; IsPlusR = br; IsPlusN = bn; HeadAppendHex = head; TailAppendHex = tail; }
+        public SendActionParam(string v, bool br, bool bn, string head, int headrepeat, string tail, int tailrepeat) 
+        { 
+            Data = v; IsPlusR = br; IsPlusN = bn; 
+            HeadAppendHex = head; HeadAppendRepeat = headrepeat;
+            TailAppendHex = tail; TailAppendRepeat = tailrepeat;
+        }
         public SendActionParam Clone()
         {
-            return new SendActionParam(Data, IsPlusR, IsPlusN, HeadAppendHex, TailAppendHex);
+            return new SendActionParam(Data, IsPlusR, IsPlusN, HeadAppendHex, HeadAppendRepeat, TailAppendHex, TailAppendRepeat);
         }
 
         public byte[] GetData()
@@ -88,10 +117,14 @@ namespace WpfNetAssit.LogicalAction.BaseAction
                 return bodydata;
             else
             {
-                var buf = new byte[headdata.Length + taildata.Length + bodydata.Length];
-                headdata.CopyTo(buf, 0);
-                bodydata.CopyTo(buf, headdata.Length);
-                taildata.CopyTo(buf, headdata.Length + bodydata.Length);
+                int headRepeat = HeadAppendRepeat >= 0 ? HeadAppendRepeat : 0;
+                int tailRepeat = TailAppendRepeat >= 0 ? TailAppendRepeat : 0;
+                var buf = new byte[headdata.Length * headRepeat + taildata.Length * tailRepeat + bodydata.Length];
+                for (int i = 0; i < headRepeat; i++)
+                    headdata.CopyTo(buf, i* headdata.Length);
+                bodydata.CopyTo(buf, headdata.Length* headRepeat);
+                for (int i = 0; i < tailRepeat; i++)
+                    taildata.CopyTo(buf, headdata.Length* headRepeat + bodydata.Length + i*taildata.Length);
                 return buf;
             }
         }

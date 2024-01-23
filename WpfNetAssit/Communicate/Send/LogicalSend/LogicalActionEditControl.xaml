@@ -60,10 +60,14 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="首部附加Hex:" Style="{DynamicResource MaterialDesignBody1TextBlock}" Margin="5" VerticalAlignment="Center" ></TextBlock>
                         <TextBox Style="{DynamicResource MaterialDesignTextBox}" VerticalAlignment="Center" MinWidth="100" MaxWidth="300" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding HeadAppendHex, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                        <TextBlock Text="x" Style="{DynamicResource MaterialDesignBody1TextBlock}" Margin="5" VerticalAlignment="Center" ></TextBlock>
+                        <TextBox Style="{DynamicResource MaterialDesignTextBox}" VerticalAlignment="Center" MinWidth="50" MaxWidth="300" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding HeadAppendRepeat, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="尾部附加Hex:" Style="{DynamicResource MaterialDesignBody1TextBlock}" Margin="5" VerticalAlignment="Center" ></TextBlock>
                         <TextBox Style="{DynamicResource MaterialDesignTextBox}" VerticalAlignment="Center" MinWidth="100" MaxWidth="300" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding TailAppendHex, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                        <TextBlock Text="x" Style="{DynamicResource MaterialDesignBody1TextBlock}" Margin="5" VerticalAlignment="Center" ></TextBlock>
+                        <TextBox Style="{DynamicResource MaterialDesignTextBox}" VerticalAlignment="Center" MinWidth="50" MaxWidth="300" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding TailAppendRepeat, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                     </StackPanel>
 
                 </StackPanel>
