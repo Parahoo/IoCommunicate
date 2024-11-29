@@ -8,9 +8,9 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.Background>
-            <ImageBrush ImageSource="73925a61733fd8c5d53b0b22c617dce5.jpeg" Opacity="0.6"/>
+            <ImageBrush x:Name="backgroundImage" ImageSource="73925a61733fd8c5d53b0b22c617dce5.jpeg" Opacity="0.6"/>
         </Grid.Background>
-        <TextBlock Text="Envove" Style="{DynamicResource MaterialDesignHeadline1TextBlock}" HorizontalAlignment="Center" VerticalAlignment="Center" FontStyle="Italic" FontFamily="Segoe Print">
+        <TextBlock Text="{Binding TitleString, ElementName=userControl}" Style="{DynamicResource MaterialDesignHeadline1TextBlock}" HorizontalAlignment="Center" VerticalAlignment="Center" FontStyle="Italic" FontFamily="Segoe Print">
             <TextBlock.Foreground>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="Black" Offset="0"/>

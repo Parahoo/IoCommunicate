@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WpfNetAssit.Properties;
 
 namespace WpfNetAssit.Pages
 {
@@ -30,11 +32,22 @@ namespace WpfNetAssit.Pages
         public static readonly DependencyProperty VersionStringProperty =
             DependencyProperty.Register("VersionString", typeof(string), typeof(HomePage), new PropertyMetadata(""));
 
+        public string TitleString
+        {
+            get { return (string)GetValue(TitleStringProperty); }
+            set { SetValue(TitleStringProperty, value); }
+        }
+
+        public static readonly DependencyProperty TitleStringProperty =
+            DependencyProperty.Register("TitleString", typeof(string), typeof(HomePage), new PropertyMetadata("ENVOVE"));
+
 
         public HomePage()
         {
             InitializeComponent();
             VersionString = GetEdition();
+            TitleString = Settings.Default.Title;
+            LoadBackground();
         }
 
         /// <summary>
@@ -43,6 +56,23 @@ namespace WpfNetAssit.Pages
         public static string GetEdition()
         {
             return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        }
+
+        public void LoadBackground()
+        {
+            string backgroundfilename = "";
+            string[] filenames = { "background.png", "background.tif", "background.jpg" };
+            foreach (string filename in filenames)
+            {
+                if (File.Exists(filename))
+                {
+                    backgroundfilename = filename;
+                    break;
+                }
+            }
+
+            if (backgroundfilename != "")
+                backgroundImage.ImageSource = new BitmapImage(new Uri(backgroundfilename, UriKind.Relative));
         }
     }
 }

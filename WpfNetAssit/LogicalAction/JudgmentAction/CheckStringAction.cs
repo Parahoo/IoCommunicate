@@ -93,7 +93,7 @@ namespace WpfNetAssit.LogicalAction.JudgmentAction
             var ret = false;
             try
             {
-                var data = dict["data"] as byte[];
+                var data = dict["recvdata"] as byte[];
 
                 if (data != null)
                     ret = Encoding.UTF8.GetString(data).Contains(param.TargetString);

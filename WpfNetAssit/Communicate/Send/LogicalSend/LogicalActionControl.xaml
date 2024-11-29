@@ -51,18 +51,21 @@
                 <HierarchicalDataTemplate ItemsSource="{Binding ChildActions}">
                     <HierarchicalDataTemplate.Triggers>
                     </HierarchicalDataTemplate.Triggers>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Name}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <TextBlock Text="{Binding Param.Info}" TextWrapping="Wrap" MaxWidth="800" VerticalAlignment="Center"/>
-                        <materialDesign:PackIcon Kind="Set" Foreground="{DynamicResource AttentionToActionBrush}" Margin="2" Visibility="{Binding IsContainer, Converter={StaticResource VisibilityConverter}}" VerticalAlignment="Center"/>
+                    <Grid>
+                        <StackPanel Orientation="Horizontal" Margin="5,0">
+                            <TextBlock Text="{Binding Name}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding Param.Info}" TextWrapping="Wrap" MaxWidth="800" VerticalAlignment="Center"/>
+                            <materialDesign:PackIcon Kind="Set" Foreground="{DynamicResource AttentionToActionBrush}" Margin="2" Visibility="{Binding IsContainer, Converter={StaticResource VisibilityConverter}}" VerticalAlignment="Center"/>
 
-                        <materialDesign:PopupBox StaysOpen="True">
-                            <materialDesign:PopupBox.ToggleContent>
-                                <materialDesign:PackIcon Kind="edit"/>
-                            </materialDesign:PopupBox.ToggleContent>
-                            <local:LogicalActionEditControl DataContext="{Binding Param}"></local:LogicalActionEditControl>
-                        </materialDesign:PopupBox>
-                    </StackPanel>
+                            <materialDesign:PopupBox StaysOpen="True">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon Kind="edit"/>
+                                </materialDesign:PopupBox.ToggleContent>
+                                <local:LogicalActionEditControl DataContext="{Binding Param}"></local:LogicalActionEditControl>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+                        <Rectangle Fill="{Binding Color}" Width="2" HorizontalAlignment="Left"/>
+                    </Grid>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>

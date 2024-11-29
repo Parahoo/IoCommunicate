@@ -27,6 +27,11 @@ namespace WpfNetAssit.LogicalAction
             pack.Data = data;
             pack.UsedTime = (DateTime.Now - lastSendTick).TotalMilliseconds;
             recvqueue.Add(pack);
+            if(recvqueue.Count > 10000)
+            {
+                // 防止内存占用过大
+                recvqueue.Take();
+            }
         }
 
         public bool Read(int timeout, System.Threading.CancellationToken cancellationToken, ref byte[] buf, ref double usedtime)

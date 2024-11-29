@@ -97,9 +97,9 @@ namespace WpfNetAssit.Communicate.Send.LogicalSend
                 string logfilename = "./log/" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".log";
                 FileStream fs = new FileStream(logfilename, FileMode.Create);
                 StreamWriter streamWriter = new StreamWriter(fs);
+                Dictionary<string, object> datacontext = new Dictionary<string, object>();
                 try
                 {
-                    Dictionary<string, object> datacontext = new Dictionary<string, object>();
 
                     ioPipe = new IoPipe() { Io = Io };
                     datacontext.Add("io", ioPipe);
@@ -133,6 +133,10 @@ namespace WpfNetAssit.Communicate.Send.LogicalSend
                 }
                 finally
                 {
+                    if(datacontext.ContainsKey("file"))
+                    {
+                        (datacontext["file"] as StreamReader).Dispose();
+                    }
                     streamWriter.Dispose();
                     fs.Dispose();
                     ioPipe = null;

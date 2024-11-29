@@ -93,7 +93,7 @@ namespace WpfNetAssit.LogicalAction.BaseAction
             if (ret)
             {
                 logfunc(string.Format("recved:{0} in {1}ms", DataToStringHelper.BeautifyToString(buf), usedtime), tab);
-                dict["data"] = buf;
+                dict["recvdata"] = buf;
             }
             else
                 logfunc(string.Format("recv: timeout {0}ms", Param.Timeout), tab);

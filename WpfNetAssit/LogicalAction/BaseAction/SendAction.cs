@@ -1,14 +1,119 @@
 ﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using WpfNetAssit.Communicate;
 using WpfNetAssit.IoConnect;
 
 namespace WpfNetAssit.LogicalAction.BaseAction
 {
+    interface ISendData
+    {
+        byte[] GetData(object datacontext);
+    }
+    public class SendData : ObservableObject, ISendData
+    {
+        protected ObservableCollection<SendData> parent = null;
+
+        public void SetParent(ObservableCollection<SendData> parent) {  this.parent = parent; }
+
+        public virtual byte[] GetData(object datacontext)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual SendData Clone()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ICommand DeleteFromParentCommand
+        {
+            get
+            {
+                if(deleteFromParentCommand == null)
+                {
+                    deleteFromParentCommand = new RelayCommand(() =>
+                    {
+                        parent.Remove(this);
+                    });
+                }
+                return deleteFromParentCommand;
+            }
+        }
+        RelayCommand deleteFromParentCommand = null;
+    }
+
+    [Serializable]
+    public class StaticSendData : SendData
+    {
+
+        private string data = "";
+        public string Data
+        {
+            get { return data; }
+            set { 
+                Set("Data", ref data, value); 
+                RaisePropertyChanged("Data");
+            }
+        }
+
+        public override byte[] GetData(object datacontext)
+        {
+            return Encoding.UTF8.GetBytes(data);
+        }
+        public override string ToString()
+        {
+            return data;
+        }
+
+        public override SendData Clone()
+        {
+            return new StaticSendData()
+            {
+                Data = data
+            };
+        }
+    }
+
+    [Serializable]
+    public class MetaSendData : SendData
+    {
+        private string metaKey = "";
+        public string MetaKey
+        {
+            get { return metaKey; }
+            set { Set("MetaKey", ref metaKey, value); RaisePropertyChanged("MetaKey"); }
+        }
+
+        public override string ToString()
+        {
+            return "{" + metaKey + "}";
+        }
+
+        public override SendData Clone()
+        {
+            return new MetaSendData() { MetaKey = metaKey };
+        }
+
+        public override byte[] GetData(object datacontext)
+        {
+            if(datacontext == null)
+                return new byte[]{ };
+            var dict = datacontext as Dictionary<string, object>;
+            if(dict == null)
+                return new byte[] { };
+            if (dict.ContainsKey(metaKey) == false)
+                return new byte[] { };
+            return dict[metaKey] as byte[];
+        }
+    }
+
     [Serializable]
     public class SendActionParam : ObservableObject
     {
@@ -19,17 +124,21 @@ namespace WpfNetAssit.LogicalAction.BaseAction
             StringBuilder sb = new StringBuilder();
             if (HeadAppendHex != "" && HeadAppendRepeat > 0)
             {
-                if(HeadAppendRepeat > 1)
+                if (HeadAppendRepeat > 1)
                     sb.Append("[" + HeadAppendHex + "  *" + HeadAppendRepeat.ToString() + "]");
                 else
                     sb.Append("[" + HeadAppendHex + "]");
             }
             sb.Append(Data);
+            foreach (var item in PlusData)
+            {
+                sb.Append(item);
+            }
             if (IsPlusR)
                 sb.Append("\\r");
             if (IsPlusN)
                 sb.Append("\\n");
-            if(TailAppendHex != "" && TailAppendRepeat > 0)
+            if (TailAppendHex != "" && TailAppendRepeat > 0)
             {
                 if (TailAppendRepeat > 1)
                     sb.Append("[" + TailAppendHex + "  *" + TailAppendRepeat.ToString() + "]");
@@ -43,7 +152,14 @@ namespace WpfNetAssit.LogicalAction.BaseAction
         public string Data
         {
             get { return data; }
-            set { Set("Data", ref data, value);RaisePropertyChanged("Info"); }
+            set { Set("Data", ref data, value); RaisePropertyChanged("Info"); }
+        }
+
+        private ObservableCollection<SendData> plusData = new ObservableCollection<SendData>();
+        public ObservableCollection<SendData> PlusData
+        {
+            get { return plusData; }
+            set { plusData = value; RaisePropertyChanged("Info"); }
         }
 
         private bool isPlusR = false;
@@ -90,44 +206,145 @@ namespace WpfNetAssit.LogicalAction.BaseAction
 
 
 
-        public SendActionParam() { }
-        public SendActionParam(string v) { Data = v; }
-        public SendActionParam(string v, bool br, bool bn, string head, int headrepeat, string tail, int tailrepeat) 
-        { 
-            Data = v; IsPlusR = br; IsPlusN = bn; 
-            HeadAppendHex = head; HeadAppendRepeat = headrepeat;
-            TailAppendHex = tail; TailAppendRepeat = tailrepeat;
+        public SendActionParam() {
+            BindPlusData();
+        }
+        public SendActionParam(SendActionParam param)
+        {
+            Data = param.Data; 
+            IsPlusR = param.IsPlusR; 
+            IsPlusN = param.IsPlusN;
+            HeadAppendHex = param.HeadAppendHex; 
+            HeadAppendRepeat = param.HeadAppendRepeat;
+            TailAppendHex = param.TailAppendHex; 
+            TailAppendRepeat = param.TailAppendRepeat;
+
+            PlusData = new ObservableCollection<SendData>();
+            BindPlusData();
+            foreach (var item in param.PlusData)
+            {
+                var nitem = item.Clone();
+                PlusData.Add(nitem);
+            }
+        }
+        void BindPlusData()
+        {
+            PlusData.CollectionChanged += (s, e) =>
+            {
+                if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+                {
+                    foreach (var item in e.NewItems)
+                    {
+                        var item2 = item as SendData;
+                        item2.SetParent(PlusData);
+                        item2.PropertyChanged += (s2, e2) => RaisePropertyChanged("Info");
+                    }
+                }
+                RaisePropertyChanged("Info");
+            };
+
         }
         public SendActionParam Clone()
         {
-            return new SendActionParam(Data, IsPlusR, IsPlusN, HeadAppendHex, HeadAppendRepeat, TailAppendHex, TailAppendRepeat);
+            return new SendActionParam(this);
         }
 
-        public byte[] GetData()
+        public byte[] GetData(object datacontext)
         {
             var headdata = HexStringConvertor.StringToHex(HeadAppendHex);
             var taildata = HexStringConvertor.StringToHex(TailAppendHex);
+
             string str = Data;
-            if (IsPlusR)
-                str += "\r";
-            if (IsPlusN)
-                str += "\n";
             var bodydata = Encoding.UTF8.GetBytes(str);
-            if (headdata.Length == 0 && taildata.Length == 0)
-                return bodydata;
-            else
+
+            List<byte[]> plusdatabytes = new List<byte[]>();
+            foreach (var item in PlusData)
+                plusdatabytes.Add(item.GetData(datacontext));
+
+            string crstr = "";
+            if (IsPlusR)
+                crstr += "\r";
+            if (IsPlusN)
+                crstr += "\n";
+            var crstrdata = Encoding.UTF8.GetBytes(crstr);
+
+
+            int headRepeat = HeadAppendRepeat >= 0 ? HeadAppendRepeat : 0;
+            int tailRepeat = TailAppendRepeat >= 0 ? TailAppendRepeat : 0;
+            int totalsize = headdata.Length * headRepeat + taildata.Length * tailRepeat + bodydata.Length + crstrdata.Length;
+            foreach (var item in plusdatabytes)
+                totalsize += item.Length;
+            if(totalsize <= 0)
+                return new byte[]{ };
+
+            var buf = new byte[totalsize];
+            int pos = 0;
+            for (int i = 0; i < headRepeat; i++)
             {
-                int headRepeat = HeadAppendRepeat >= 0 ? HeadAppendRepeat : 0;
-                int tailRepeat = TailAppendRepeat >= 0 ? TailAppendRepeat : 0;
-                var buf = new byte[headdata.Length * headRepeat + taildata.Length * tailRepeat + bodydata.Length];
-                for (int i = 0; i < headRepeat; i++)
-                    headdata.CopyTo(buf, i* headdata.Length);
-                bodydata.CopyTo(buf, headdata.Length* headRepeat);
-                for (int i = 0; i < tailRepeat; i++)
-                    taildata.CopyTo(buf, headdata.Length* headRepeat + bodydata.Length + i*taildata.Length);
-                return buf;
+                headdata.CopyTo(buf, pos);
+                pos += headdata.Length;
+            }
+
+            bodydata.CopyTo(buf, pos);
+            pos += bodydata.Length;
+
+            foreach (var item in plusdatabytes)
+            {
+                item.CopyTo(buf, pos);
+                pos += item.Length;
+            }
+
+            crstrdata.CopyTo(buf, pos);
+            pos += crstrdata.Length;
+
+            for (int i = 0; i < tailRepeat; i++)
+            {
+                taildata.CopyTo(buf, pos);
+                pos += taildata.Length;
+            }
+            return buf;
+        }
+
+        public ICommand AddStaticStringDataCommand {
+            get 
+            {
+                if (addStaticStringDataCommand == null)
+                    addStaticStringDataCommand = new RelayCommand(new Action(() => {
+                        var data = new StaticSendData() { Data = "" };
+                        PlusData.Add(data); 
+                    })); 
+                return addStaticStringDataCommand; 
+            } 
+        }
+        RelayCommand addStaticStringDataCommand = null;
+
+        public ICommand AddFileMetaDataCommand
+        {
+            get
+            {
+                if (addFileMetaDataCommand == null)
+                    addFileMetaDataCommand = new RelayCommand(new Action(() => {
+                        var data = new MetaSendData() { MetaKey = "filedata" };
+                        PlusData.Add(data);
+                    }));
+                return addFileMetaDataCommand;
             }
         }
+        RelayCommand addFileMetaDataCommand = null;
+
+        public ICommand AddIoRecvMetaDataCommand
+        {
+            get
+            {
+                addIoRecvMetaDataCommand = new RelayCommand(new Action(() =>
+                {
+                    var data = new MetaSendData() { MetaKey = "recvdata" };
+                    PlusData.Add(data);
+                }));
+                return addIoRecvMetaDataCommand;
+            }
+        }
+        RelayCommand addIoRecvMetaDataCommand = null;
     }
 
     public class SendActionBuilder : BaseActionBuilder
@@ -145,7 +362,6 @@ namespace WpfNetAssit.LogicalAction.BaseAction
         }
 
         public SendActionBuilder() { Param = new SendActionParam(); }
-        public SendActionBuilder(string str) { Param = new SendActionParam() { Data = str }; }
         public SendActionBuilder(SendActionParam param) { Param = param.Clone(); }
         public override string ToString()
         {
@@ -184,7 +400,7 @@ namespace WpfNetAssit.LogicalAction.BaseAction
             string tab = dict["tab"] as string;
             logfunc(string.Format("send: {0}", Param.Info), tab);
 
-            var buf = Param.GetData();
+            var buf = Param.GetData(datacontext);
             int writesize = buf.Length;
             var io = dict["io"] as IoPipe;
             var ret = io.Write(buf, ref writesize);

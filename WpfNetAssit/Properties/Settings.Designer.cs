@@ -22,5 +22,14 @@ namespace WpfNetAssit.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("ENVOVE")]
+        public string Title {
+            get {
+                return ((string)(this["Title"]));
+            }
+        }
     }
 }

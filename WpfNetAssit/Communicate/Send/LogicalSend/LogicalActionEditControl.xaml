@@ -45,10 +45,44 @@
             </DataTemplate>
             <DataTemplate DataType="{x:Type baseaction:SendActionParam}">
                 <StackPanel>
+                    <TextBlock Text="发送数据：" Style="{DynamicResource MaterialDesignBody1TextBlock}" VerticalAlignment="Center"></TextBlock>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="发送数据：" Style="{DynamicResource MaterialDesignBody1TextBlock}" VerticalAlignment="Center"></TextBlock>
                         <TextBox MinWidth="100" MaxWidth="300" TextWrapping="Wrap" AcceptsReturn="True" VerticalAlignment="Center" Text="{Binding Data, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                        <materialDesign:PopupBox PlacementMode="BottomAndAlignCentres">
+                            <materialDesign:PopupBox.ToggleContent>
+                                <Button Style="{DynamicResource MaterialDesignFloatingActionButton}" Width="20" Height="20" Margin="10,0" IsHitTestVisible="False">
+                                    <materialDesign:PackIcon Kind="Add"/>
+                                </Button>
+                            </materialDesign:PopupBox.ToggleContent>
+                            <StackPanel>
+                                <Button Content="字符串" Command="{Binding AddStaticStringDataCommand}"/>
+                                <Button Content="文件数据" Command="{Binding AddFileMetaDataCommand}" />
+                                <Button Content="io接收数据" Command="{Binding AddIoRecvMetaDataCommand}"/>
+                            </StackPanel>
+                        </materialDesign:PopupBox>
                     </StackPanel>
+                    <ListBox ItemsSource="{Binding PlusData}" Margin="5" >
+                        <ListBox.Resources>
+                            <DataTemplate DataType="{x:Type baseaction:StaticSendData}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="字符串:" Margin="10,0" VerticalAlignment="Center"/>
+                                    <TextBox Text="{Binding Data, UpdateSourceTrigger=PropertyChanged}" MinWidth="100" VerticalAlignment="Center"/>
+                                    <Button Command="{Binding DeleteFromParentCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}" Width="20" Height="20" Margin="10,0">
+                                        <materialDesign:PackIcon Kind="Close"/>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type baseaction:MetaSendData}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="变量:" Margin="10,0" VerticalAlignment="Center"/>
+                                    <TextBox Text="{Binding MetaKey, UpdateSourceTrigger=PropertyChanged}" MinWidth="100" VerticalAlignment="Center"/>
+                                    <Button Command="{Binding DeleteFromParentCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}" Width="20" Height="20" Margin="10,0">
+                                        <materialDesign:PackIcon Kind="Close"/>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.Resources>
+                    </ListBox>
                     <StackPanel Orientation="Horizontal">
                         <ToggleButton Style="{DynamicResource MaterialDesignSwitchToggleButton}" Margin="5" VerticalAlignment="Center" IsChecked="{Binding IsPlusR}"></ToggleButton>
                         <TextBlock Text="附加\r" Style="{DynamicResource MaterialDesignBody1TextBlock}" Margin="5" VerticalAlignment="Center"></TextBlock>
@@ -87,6 +121,16 @@
                         <TextBlock Text="块间隔时间：" Style="{DynamicResource MaterialDesignBody1TextBlock}" VerticalAlignment="Center"></TextBlock>
                         <TextBox MinWidth="100" MaxWidth="300" TextWrapping="Wrap" AcceptsReturn="True" VerticalAlignment="Center" Text="{Binding GapTime, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                         <TextBlock Text="ms" Style="{DynamicResource MaterialDesignBody1TextBlock}" VerticalAlignment="Center"></TextBlock>
+                    </StackPanel>
+
+                </StackPanel>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type baseaction:ReadFileActionParam}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="文件路径：" Style="{DynamicResource MaterialDesignBody1TextBlock}" VerticalAlignment="Center"></TextBlock>
+                        <TextBox MinWidth="100" MaxWidth="300" TextWrapping="Wrap" AcceptsReturn="True" VerticalAlignment="Center" Text="{Binding FilePath, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                        <Button Style="{DynamicResource MaterialDesignFlatButton}" Margin="5" VerticalAlignment="Center" Command="{Binding SelectFileCommand}">选择文件</Button>
                     </StackPanel>
 
                 </StackPanel>

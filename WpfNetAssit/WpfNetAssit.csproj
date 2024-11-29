@@ -149,6 +149,7 @@
       <DependentUpon>TcpServerIoSettingPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="LogicalAction\BaseAction\BaseAction.cs" />
+    <Compile Include="LogicalAction\BaseAction\ReadFileAction.cs" />
     <Compile Include="LogicalAction\BaseAction\RecvAction.cs" />
     <Compile Include="LogicalAction\BaseAction\SendAction.cs" />
     <Compile Include="LogicalAction\BaseAction\SendFileAction.cs" />
